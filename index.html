@@ -629,14 +629,14 @@ footer{background:#060616;color:rgba(255,255,255,.5);padding:38px 5%;text-align:
         <h3 class="screen-title" id="pwTitle">Premium erforderlich</h3>
         <p class="screen-fa" id="pwFa">۵ سوال رایگان تمام شد — برای ادامه اشتراک بخرید</p>
         <div class="plan-grid">
-          <div class="plan-card" onclick="selectPlan(this,'m')">
+          <div class="plan-card" onclick="selectPlan(this,'m')" data-plan="m">
             <div class="plan-name" id="pln1">Monatlich</div>
             <div class="plan-fa" id="plf1">اشتراک ماهانه</div>
             <div class="plan-price">CHF 9</div>
             <div class="plan-per" id="plp1">/Monat</div>
             <div class="plan-feat" id="plft1">✓ 400 Fragen<br>✓ Unbegrenzte Prüfungen<br>✓ KI-Analyse</div>
           </div>
-          <div class="plan-card featured on" onclick="selectPlan(this,'y')">
+          <div class="plan-card featured on" onclick="selectPlan(this,'y')" data-plan="y">
             <span class="plan-badge-lbl">⭐ BEST VALUE</span>
             <div class="plan-name" id="pln2">Jährlich</div>
             <div class="plan-fa" id="plf2">سالانه — ۵۰٪ تخفیف</div>
@@ -645,6 +645,8 @@ footer{background:#060616;color:rgba(255,255,255,.5);padding:38px 5%;text-align:
             <div class="plan-feat" id="plft2">✓ Alles + KI-Plan<br>✓ Offline-Zugang<br>✓ PDF Downloads</div>
           </div>
         </div>
+        <button id="stripeBtn" onclick="stripeCheckout()" style="width:100%;padding:16px;background:#635BFF;color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px;">💳 Mit Kreditkarte bezahlen / پرداخت آنلاین</button>
+        <div style="text-align:center;font-size:12px;color:#6B7280;margin-bottom:12px;">— oder per Banküberweisung —</div>
         <div class="iban-box">
           <div class="iban-title" id="ibanTitle">💳 پرداخت از طریق IBAN / Wise</div>
           <div class="iban-num" id="ibanNum">در حال بارگذاری... / Wird geladen...</div>
@@ -1322,6 +1324,42 @@ function pBarDraw(){
     html+='<span style="background:'+col+';"></span>';
   }
   bar.innerHTML=html;
+}
+
+
+// ── STRIPE CHECKOUT ────────────────────────────────────
+const STRIPE_MONTHLY = 'price_1TgBV2DFKfiLbSelG0C9IyVC';
+const STRIPE_YEARLY  = 'price_1TgBV2DFKfiLbSelqoKwu6eR';
+const SB_CHECKOUT_URL = 'https://npfvlfdjngzczxhghmyu.supabase.co/functions/v1/create-checkout';
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZnZsZmRqbmd6Y3p4aGdobXl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMTI2NjgsImV4cCI6MjA5NDg4ODY2OH0.oqnB4FTnmj-wno7AEgTz-MAmunazqwpj5jEkvB5xN8s';
+
+async function stripeCheckout(){
+  const email = ge('confEmail')?.value?.trim() || USER?.email || '';
+  if(!email){ alert('Bitte E-Mail eingeben / لطفاً ایمیل وارد کنید'); return; }
+  
+  const plan = document.querySelector('.plan-card.on')?.dataset?.plan || 'y';
+  const priceId = plan === 'm' ? STRIPE_MONTHLY : STRIPE_YEARLY;
+  
+  const btn = ge('stripeBtn');
+  if(btn){ btn.textContent = '⏳ Wird geladen...'; btn.disabled = true; }
+  
+  try {
+    const r = await fetch(SB_CHECKOUT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + SB_ANON,
+        'apikey': SB_ANON
+      },
+      body: JSON.stringify({ priceId, email })
+    });
+    const data = await r.json();
+    if(data.url){ window.location.href = data.url; }
+    else { alert('Fehler / خطا: ' + JSON.stringify(data)); }
+  } catch(e) {
+    alert('Verbindungsfehler / خطای اتصال');
+  }
+  if(btn){ btn.textContent = '💳 Mit Kreditkarte bezahlen'; btn.disabled = false; }
 }
 
 </script>
