@@ -619,7 +619,10 @@ footer{background:#060616;color:rgba(255,255,255,.5);padding:38px 5%;text-align:
           <div class="ex-score-item"><div class="ex-score-n r" id="scoreWrg">0</div><div class="ex-score-l">✗</div></div>
           <div class="ex-score-item"><div class="ex-score-n" id="scorePts">0</div><div class="ex-score-l" id="ptsLbl">Pkt</div></div>
         </div>
-        <button class="btn-next" id="btnNext" onclick="nextQuestion()" disabled><span id="nextLbl">Weiter</span> →</button>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn-next" id="btnNext" onclick="nextQuestion()" disabled><span id="nextLbl">Weiter</span> →</button>
+          <button onclick="openAiAnalysis()" style="padding:9px 12px;background:#7C3AED;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;" title="KI-Analyse">🤖</button>
+        </div>
       </div>
     </div>
 
@@ -739,6 +742,7 @@ async function hashPwd(p){const b=await crypto.subtle.digest('SHA-256',new TextE
 // ── STATE ─────────────────────────────────────────────────
 let LANG='de', USER=null, PLAN='y';
 let qIdx=0, score=0, errors=0, answered=false, timer=null, timeLeft=2700, examMode='exam';
+let selectedOpts=[], examResults=[];
 const FREE_LIMIT=5;
 
 // ── QUESTIONS (50 adet, ilk 10 fotoğraflı) ───────────────
@@ -951,7 +955,7 @@ function startTimer(){
 function loadQuestion(){
   if(qIdx>=50){showResult();return;}
   if(examMode==='exam'&&qIdx>=FREE_LIMIT){clearInterval(timer);showPaywall();return;}
-  const q=QUESTIONS[qIdx];answered=false;
+  const q=QUESTIONS[qIdx];answered=false;selectedOpts=[];
   const t=TX[LANG];
   const isRTL=(LANG==='fa'||LANG==='az');
   ge('qNum').textContent=(LANG==='fa'?'سوال':LANG==='az'?'Sual':LANG==='en'?'Question':'Frage')+' '+(qIdx+1)+' '+t.qof+' 50';
@@ -964,27 +968,94 @@ function loadQuestion(){
   if(q.img){qimg.src=q.img;qimg.style.display='block';}else{qimg.style.display='none';}
   ge('progressBar').style.width=((qIdx/50)*100)+'%';
   ge('btnNext').disabled=true;
+  ge('btnNext').textContent='';
   const opts=ge('optionsDiv');opts.innerHTML='';
   q.opts.forEach((o,i)=>{
     const d=document.createElement('div');d.className='ex-opt';
     const osub=o[LANG]||o.fa;
     d.innerHTML=`<div class="ex-opt-letter">${['A','B','C'][i]}</div><div><div>${o.de}</div><div class="ex-opt-sub" style="${isRTL?'font-family:\'Vazirmatn\',sans-serif;direction:rtl;':''}">${osub}</div></div>`;
-    d.onclick=()=>pickAnswer(d,i,o.ok,q);
+    d.onclick=()=>toggleAnswer(d,i,q);
     opts.appendChild(d);
   });
+  // Confirm button
+  let confirmBtn = ge('confirmBtn');
+  if(!confirmBtn){
+    confirmBtn = document.createElement('button');
+    confirmBtn.id='confirmBtn';
+    confirmBtn.style.cssText='width:100%;padding:12px;background:var(--bl);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-top:10px;display:none;';
+    confirmBtn.onclick=submitAnswer;
+    opts.parentElement.insertBefore(confirmBtn, opts.nextSibling);
+  }
+  confirmBtn.textContent='✓ Bestätigen';
+  confirmBtn.style.display='none';
   updateScore();
 }
-function pickAnswer(el,idx,correct,q){
-  if(answered)return;answered=true;
+
+function toggleAnswer(el, idx, q){
+  if(answered)return;
+  if(selectedOpts.includes(idx)){
+    selectedOpts=selectedOpts.filter(i=>i!==idx);
+    el.classList.remove('selected');
+  }else{
+    selectedOpts.push(idx);
+    el.classList.add('selected');
+  }
+  const confirmBtn=ge('confirmBtn');
+  confirmBtn.style.display=selectedOpts.length>0?'block':'none';
+}
+
+function submitAnswer(){
+  if(answered||selectedOpts.length===0)return;
+  answered=true;
+  const q=QUESTIONS[qIdx];
+  const correctIdxs=q.opts.map((o,i)=>o.ok?i:-1).filter(i=>i>=0);
+  const isCorrect = correctIdxs.length===selectedOpts.length && correctIdxs.every(i=>selectedOpts.includes(i));
   document.querySelectorAll('.ex-opt').forEach((o,i)=>{
+    o.classList.remove('selected');
     if(q.opts[i].ok)o.classList.add('correct');
-    else if(i===idx&&!correct)o.classList.add('wrong');
+    else if(selectedOpts.includes(i))o.classList.add('wrong');
   });
-  if(correct)score+=3;else errors++;
-  ge('btnNext').disabled=false;updateScore();
+  if(isCorrect)score+=3;else errors++;
+  examResults.push({q, correct:isCorrect});
+  ge('confirmBtn').style.display='none';
+  ge('btnNext').disabled=false;
+  updateScore();
+}
+
+function pickAnswer(el,idx,correct,q){
+  // Legacy - kept for compatibility
+  toggleAnswer(el, idx, q);
 }
 function nextQuestion(){if(!answered)return;qIdx++;loadQuestion();}
 function updateScore(){ge('scoreCor').textContent=Math.floor(score/3);ge('scoreWrg').textContent=errors;ge('scorePts').textContent=score;}
+function openAiAnalysis(){
+  if(!USER?.is_premium){openModal('login');toast('Premium erforderlich für KI-Analyse','err');return;}
+  const wrong = examResults ? examResults.filter(r=>!r.correct) : [];
+  if(wrong.length===0){toast('Keine Fehler — perfekt!','ok');return;}
+  
+  const modal = document.getElementById('modalContent');
+  document.getElementById('modalBg').style.display='flex';
+  modal.innerHTML = `
+    <h3 style="font-size:18px;font-weight:800;margin-bottom:16px;">🤖 KI-Analyse</h3>
+    <div id="aiResult" style="min-height:100px;background:#f8faff;border-radius:10px;padding:16px;font-size:13px;line-height:1.7;color:#374151;">
+      <div style="text-align:center;padding:20px;">⏳ Analysiert...</div>
+    </div>
+  `;
+  
+  const wrongTopics = wrong.slice(0,6).map(r=>r.q?.de||r.q?.text_de||'').join('; ');
+  const prompt = 'Analysiere diese Schweizer Fahrprüfung auf Deutsch und Persisch. Richtig: '+(examResults.filter(r=>r.correct).length)+'/'+examResults.length+'. Falsch: '+wrongTopics+'. Gib Lernempfehlungen. Max 150 Wörter pro Sprache.';
+  
+  fetch('https://npfvlfdjngzczxhghmyu.supabase.co/functions/v1/ai-analysis',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZnZsZmRqbmd6Y3p4aGdobXl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMTI2NjgsImV4cCI6MjA5NDg4ODY2OH0.oqnB4FTnmj-wno7AEgTz-MAmunazqwpj5jEkvB5xN8s','apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZnZsZmRqbmd6Y3p4aGdobXl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMTI2NjgsImV4cCI6MjA5NDg4ODY2OH0.oqnB4FTnmj-wno7AEgTz-MAmunazqwpj5jEkvB5xN8s'},
+    body:JSON.stringify({prompt})
+  }).then(r=>r.json()).then(d=>{
+    document.getElementById('aiResult').innerHTML = '<p style="white-space:pre-wrap;">'+(d.text||d.error||'Fehler')+'</p>';
+  }).catch(()=>{
+    document.getElementById('aiResult').innerHTML = 'Verbindungsfehler';
+  });
+}
+
 function showPaywall(){
   showScreen('screenPay');
   ge('ibanNum').textContent=IBAN_DISPLAY;
@@ -1051,12 +1122,38 @@ document.querySelectorAll('.fadein').forEach(el=>fadeObs.observe(el));
 function openModal(type){
   const t=TX[LANG];let html='';
   if(type==='login'){
-    html=`<h3 class="modal-h">${t.nb1}</h3><p class="modal-sub fa">${LANG==='fa'?'به حساب خود وارد شوید':LANG==='az'?'Hesabınıza daxil olun':LANG==='en'?'Sign in to your account':'In Ihr Konto einloggen'}</p>
-    <div class="m-err" id="loginErr"></div><div class="m-spin" id="loginSpin"><div class="spinner"></div></div>
-    <input class="m-input" type="email" id="loginEmail" placeholder="E-Mail">
-    <input class="m-input" type="password" id="loginPass" placeholder="${t.rgl2}">
-    <button class="btn-msubmit" onclick="doLogin()">${t.nb1}</button>
-    <div class="m-link">${LANG==='fa'?'حساب ندارید؟':LANG==='az'?'Hesabınız yox?':LANG==='en'?'No account?':'Kein Konto?'} <a onclick="openModal('reg')">${t.nb2}</a></div>`;
+    html=`<h3 class="modal-h">${t.nb1}</h3>
+    <div style="display:flex;gap:6px;background:#f1f5f9;border-radius:10px;padding:4px;margin-bottom:16px;">
+      <button onclick="setLoginMode('email')" id="lmEmail" style="flex:1;padding:8px;border:none;border-radius:8px;background:#1B4FD8;color:#fff;font-weight:700;cursor:pointer;font-size:13px;">📧 E-Mail</button>
+      <button onclick="setLoginMode('phone')" id="lmPhone" style="flex:1;padding:8px;border:none;border-radius:8px;background:transparent;color:#6B7280;font-weight:700;cursor:pointer;font-size:13px;">📱 Telefon</button>
+    </div>
+    <div class="m-err" id="loginErr"></div>
+    <div id="emailSection">
+      <input class="m-input" type="email" id="loginEmail" placeholder="E-Mail">
+      <div style="position:relative;">
+        <input class="m-input" type="password" id="loginPass" placeholder="Passwort" style="padding-right:44px;">
+        <button onclick="togglePass('loginPass',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;">🙈</button>
+      </div>
+      <button class="btn-msubmit" onclick="doLogin()">${t.nb1}</button>
+    </div>
+    <div id="phoneSection" style="display:none;">
+      <div id="phoneSendDiv">
+        <input class="m-input" type="tel" id="loginPhone" placeholder="+41 79 123 45 67">
+        <button class="btn-msubmit" onclick="sendSmsCode()">📱 SMS Code senden</button>
+      </div>
+      <div id="phoneVerifyDiv" style="display:none;">
+        <p style="text-align:center;color:#6B7280;font-size:13px;margin-bottom:10px;">Code wurde gesendet</p>
+        <input class="m-input" type="number" id="loginOtp" placeholder="000000" style="text-align:center;font-size:22px;letter-spacing:8px;">
+        <button class="btn-msubmit" onclick="verifyOtpWeb()">✓ Bestätigen</button>
+        <button onclick="document.getElementById('phoneSendDiv').style.display='';document.getElementById('phoneVerifyDiv').style.display='none';" style="width:100%;padding:10px;background:none;border:none;color:#6B7280;cursor:pointer;font-size:13px;">← Nummer ändern</button>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:12px;">
+      <button onclick="guestLogin()" style="background:none;border:1px solid #e5e7eb;border-radius:8px;padding:10px 20px;color:#6B7280;cursor:pointer;font-size:13px;width:100%;">👤 Als Gast fortfahren / مهمان</button>
+    </div>
+    <div class="m-link" style="margin-top:10px;">${LANG==='fa'?'حساب ندارید؟':LANG==='az'?'Hesabınız yox?':LANG==='en'?'No account?':'Kein Konto?'} <a onclick="openModal('reg')">${t.nb2}</a></div>
+    <div style="text-align:center;margin-top:8px;"><a href="/privacy.html" style="color:#9CA3AF;font-size:11px;">🔒 Datenschutz</a></div>
+    `;
   }else if(type==='reg'){
     html=`<h3 class="modal-h">${t.rgtitle}</h3><p class="modal-sub fa">${t.rgsub}</p>
     <div class="m-err" id="mregErr"></div><div class="m-ok" id="mregOk"></div><div class="m-spin" id="mregSpin"><div class="spinner"></div></div>
@@ -1067,13 +1164,100 @@ function openModal(type){
     <button class="btn-msubmit" onclick="doModalRegister()">${t.rgbtn}</button>
     <div class="m-link">${LANG==='fa'?'حساب دارید؟':LANG==='az'?'Hesabınız var?':LANG==='en'?'Have account?':'Schon Konto?'} <a onclick="openModal('login')">${t.nb1}</a></div>`;
   }else if(type==='profile'&&USER){
-    html=`<h3 class="modal-h">👤 ${USER.full_name}</h3><p style="color:var(--gr);font-size:12px;margin-bottom:14px;">${USER.email}</p>
-    <div style="background:var(--grl);border-radius:9px;padding:12px;margin-bottom:14px;">Status: <strong style="color:${USER.is_premium?'var(--gd)':'var(--bl)'}">${USER.is_premium?'⭐ Premium':'🔵 Free'}</strong></div>
-    ${!USER.is_premium?`<button class="btn-msubmit" style="margin-bottom:8px;" onclick="closeModal(true);goto('exam');">⭐ ${LANG==='fa'?'اشتراک ویژه':LANG==='az'?'Premium al':LANG==='en'?'Get Premium':'Auf Premium upgraden'}</button>`:''}
-    <button class="btn-msubmit" style="background:var(--grl);color:var(--gr);" onclick="doLogout();">${TX[LANG].logout}</button>`;
+    html=`<h3 class="modal-h">👤 ${USER.full_name||'Benutzer'}</h3>
+    <p style="color:var(--gr);font-size:12px;margin-bottom:10px;">${USER.isGuest?'Gast / مهمان':USER.email}</p>
+    <div style="background:var(--grl);border-radius:9px;padding:10px;margin-bottom:14px;display:flex;justify-content:space-between;">
+      <span>Status:</span><strong style="color:${USER.is_premium?'#16A34A':'var(--bl)'}">${USER.is_premium?'⭐ Premium':'🔵 Free'}</strong>
+    </div>
+    ${!USER.isGuest?`<div style="margin-bottom:14px;">
+      <label style="font-size:11px;color:var(--gr);font-weight:600;">✏️ Name ändern</label>
+      <input id="editNameInp" class="m-input" type="text" value="${USER.full_name||''}" placeholder="Name" style="margin-top:6px;">
+      <button onclick="saveProfileName()" style="width:100%;padding:9px;background:var(--bl);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;margin-top:6px;">💾 Speichern</button>
+    </div>`:''}
+    ${!USER.is_premium?`<button onclick="closeModal(true);goto('exam');" style="width:100%;padding:11px;background:var(--bl);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;margin-bottom:8px;">⭐ Premium kaufen</button>`:''}
+    <button onclick="confirmLogout()" style="width:100%;padding:12px;background:#FEF3C7;color:#92400E;border:1px solid #F59E0B;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;margin-bottom:8px;">🚪 Hesaptan Çık / Abmelden</button>
+    ${!USER.isGuest?`<button onclick="confirmDeleteAccount()" style="width:100%;padding:12px;background:#FEF2F2;color:#DC2626;border:1px solid #DC2626;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;">🗑️ Hesabı Sil / Konto löschen</button>`:''}
+    `;
   }
   ge('modalContent').innerHTML=html;ge('modalBg').classList.add('open');
 }
+async function setLoginMode(mode){
+  if(mode==='email'){
+    document.getElementById('emailSection').style.display='';
+    document.getElementById('phoneSection').style.display='none';
+    document.getElementById('lmEmail').style.background='#1B4FD8';
+    document.getElementById('lmEmail').style.color='#fff';
+    document.getElementById('lmPhone').style.background='transparent';
+    document.getElementById('lmPhone').style.color='#6B7280';
+  } else {
+    document.getElementById('emailSection').style.display='none';
+    document.getElementById('phoneSection').style.display='';
+    document.getElementById('lmPhone').style.background='#1B4FD8';
+    document.getElementById('lmPhone').style.color='#fff';
+    document.getElementById('lmEmail').style.background='transparent';
+    document.getElementById('lmEmail').style.color='#6B7280';
+  }
+}
+
+function togglePass(id, btn){
+  const el = document.getElementById(id);
+  if(el.type==='password'){el.type='text';btn.textContent='👁️';}
+  else{el.type='password';btn.textContent='🙈';}
+}
+
+function guestLogin(){
+  USER = {id:'guest',email:'',full_name:'Gast',is_premium:false,isGuest:true};
+  closeModal(true);
+  toast('Als Gast angemeldet','ok');
+  document.getElementById('nb1').style.display='none';
+  document.getElementById('nb2').style.display='none';
+}
+
+async function sendSmsCode(){
+  const phone = document.getElementById('loginPhone').value.trim();
+  if(!phone){toast('Telefonnummer eingeben','err');return;}
+  try {
+    const r = await fetch(SBURL+'/auth/v1/otp',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SBKEY},
+      body:JSON.stringify({phone,channel:'sms'})
+    });
+    if(r.ok){
+      document.getElementById('phoneSendDiv').style.display='none';
+      document.getElementById('phoneVerifyDiv').style.display='';
+      toast('SMS gesendet!','ok');
+    } else {
+      const e=await r.json();
+      toast(e.msg||'Fehler','err');
+    }
+  }catch(e){toast('Verbindungsfehler','err');}
+}
+
+async function verifyOtpWeb(){
+  const phone = document.getElementById('loginPhone').value.trim();
+  const token = document.getElementById('loginOtp').value.trim();
+  if(!token){toast('Code eingeben','err');return;}
+  try {
+    const r = await fetch(SBURL+'/auth/v1/verify',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SBKEY},
+      body:JSON.stringify({phone,token,type:'sms'})
+    });
+    const data = await r.json();
+    if(r.ok && data.user){
+      const ur = await sbReq('users?email=eq.'+encodeURIComponent(phone));
+      let user = Array.isArray(ur) && ur[0];
+      if(!user){
+        const cr = await sbReq('users','POST',{email:phone,full_name:'Benutzer '+phone.slice(-4),language:LANG,is_premium:false,created_at:new Date().toISOString()});
+        user = Array.isArray(cr) && cr[0];
+      }
+      if(user){USER=user;closeModal(true);afterLogin();toast('Willkommen '+user.full_name+'!','ok');}
+    } else {
+      toast(data.msg||'Falscher Code','err');
+    }
+  }catch(e){toast('Verbindungsfehler','err');}
+}
+
 async function doLogin(){
   const email=ge('loginEmail')?.value?.trim(),pass=ge('loginPass')?.value;
   if(!email||!pass){showErr('loginErr',TX[LANG].fillAll);return;}
@@ -1116,6 +1300,33 @@ function toast(msg,type=''){
   setTimeout(()=>el.classList.add('show'),10);
   setTimeout(()=>el.classList.remove('show'),3800);
 }
+
+function saveProfileName(){
+  const name = document.getElementById('editNameInp')?.value?.trim();
+  if(!name){toast('Name eingeben','err');return;}
+  sbReq('users?id=eq.'+USER.id,'PATCH',{full_name:name}).then(r=>{
+    if(r){USER.full_name=name;localStorage.setItem('fr_user',JSON.stringify(USER));updateNavUser();toast('Gespeichert!','ok');}
+  });
+}
+
+function confirmLogout(){
+  if(confirm('Wirklich abmelden? / مطمئنی؟')){
+    if(confirm('Abmeldung bestätigen?')){doLogout();}
+  }
+}
+
+function confirmDeleteAccount(){
+  if(confirm('Konto wirklich löschen? Alle Daten werden gelöscht!')){
+    if(confirm('LETZTE WARNUNG: Endgültig löschen?')){
+      sbReq('users?id=eq.'+USER.id,'DELETE').then(()=>{
+        doLogout();
+        toast('Konto gelöscht','ok');
+      });
+    }
+  }
+}
+
+
 
 // ── INIT ──────────────────────────────────────────────────
 loadUser();
