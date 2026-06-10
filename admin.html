@@ -172,6 +172,39 @@ tr:hover td{background:#FAFBFF;}
 
 /* IMG in table */
 .timg{height:38px;border-radius:6px;object-fit:contain;border:1px solid var(--border);background:#F8FAFC;}
+
+@media (max-width: 768px) {
+  .sidebar { display: none !important; }
+  .main { margin-left: 0 !important; padding: 10px !important; }
+  .topbar { padding: 10px !important; }
+  .topbar h1 { font-size: 16px !important; }
+  table { font-size: 12px !important; }
+  .btn { padding: 8px 12px !important; font-size: 12px !important; }
+  .modal-box { width: 95% !important; max-width: 95% !important; margin: 10px auto !important; }
+  .mgrid { grid-template-columns: 1fr !important; }
+  .minp, .mta, .msel { font-size: 14px !important; padding: 10px !important; }
+  .arow { flex-direction: column !important; }
+  th:nth-child(1), td:nth-child(1) { display: none; }
+  th:nth-child(4), td:nth-child(4) { display: none; }
+  .card { padding: 12px !important; }
+  .stat-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* Mobile hamburger menu */
+.mob-menu-btn {
+  display: none;
+  background: var(--primary);
+  border: none;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+}
+@media (max-width: 768px) {
+  .mob-menu-btn { display: block; }
+  .sidebar.open { display: flex !important; position: fixed; z-index: 1000; height: 100vh; }
+}
 </style>
 </head>
 <body>
@@ -219,7 +252,8 @@ tr:hover td{background:#FAFBFF;}
 
   <!-- MAIN -->
   <div class="main">
-    <div class="topbar">
+    <div class="topbar" style="display:flex;align-items:center;gap:10px;">
+  <button class="mob-menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
       <div class="ptitle" id="ptitle">Dashboard</div>
       <div class="pdate" id="pdate"></div>
     </div>
