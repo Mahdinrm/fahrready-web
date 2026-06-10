@@ -448,7 +448,7 @@ footer{background:#060616;color:rgba(255,255,255,.5);padding:38px 5%;text-align:
     <div style="font-size:48px;margin-bottom:12px;">⭐</div>
     <div style="font-size:20px;font-weight:800;margin-bottom:10px;">Premium erforderlich</div>
     <div style="font-size:13px;color:#6B7280;margin-bottom:24px;">10 kostenlose Fragen genutzt.</div>
-    <button onclick="pPay()" style="background:#1B4FD8;color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:15px;font-weight:800;cursor:pointer;display:block;width:100%;">⭐ Premium kaufen</button>
+    <button onclick="pPay()" style="background:#1B4FD8;color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:15px;font-weight:800;cursor:pointer;display:block;width:100%;">⭐ ${LANG==='fa'?'خرید پریمیوم':LANG==='az'?'Premium al':LANG==='en'?'Get Premium':'Premium kaufen'}</button>
   </div>
 
   <div id="pDone" style="display:none;text-align:center;padding:20px 0;">
@@ -708,8 +708,13 @@ footer{background:#060616;color:rgba(255,255,255,.5);padding:38px 5%;text-align:
     <a onclick="goto('exam')" id="flb">Prüfung</a>
     <a onclick="goto('news')" id="flc">Nachrichten</a>
     <a onclick="goto('reg')" id="fld">Registrieren</a>
-    <a href="#" id="fle">Datenschutz</a>
+    <a href="/privacy.html" id="fle">Datenschutz</a>
     <a href="#" id="flf">Kontakt</a>
+  </div>
+  <div class="ft-apps" style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap;">
+    <a href="https://github.com/Mahdinrm/FahrReady/releases/latest" target="_blank" style="display:flex;align-items:center;gap:6px;background:#1A1A2E;color:#fff;padding:8px 16px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:600;">
+      📱 Android APK
+    </a>
   </div>
   <div class="ft-copy">© 2025 FahrReady.ch 🇨🇭 · <span id="ftcopy">Alle Rechte vorbehalten</span></div>
 </footer>
@@ -986,7 +991,7 @@ function loadQuestion(){
     confirmBtn.onclick=submitAnswer;
     opts.parentElement.insertBefore(confirmBtn, opts.nextSibling);
   }
-  confirmBtn.textContent='✓ Bestätigen';
+  confirmBtn.textContent=`✓ ${LANG==='fa'?'تأیید':LANG==='az'?'Təsdiq':LANG==='en'?'Confirm':'Bestätigen'}`;
   confirmBtn.style.display='none';
   updateScore();
 }
@@ -1139,20 +1144,20 @@ function openModal(type){
     <div id="phoneSection" style="display:none;">
       <div id="phoneSendDiv">
         <input class="m-input" type="tel" id="loginPhone" placeholder="+41 79 123 45 67">
-        <button class="btn-msubmit" onclick="sendSmsCode()">📱 SMS Code senden</button>
+        <button class="btn-msubmit" onclick="sendSmsCode()">📱 ${LANG==='fa'?'ارسال کد':LANG==='az'?'SMS kod göndər':LANG==='en'?'Send SMS Code':'SMS Code senden'}</button>
       </div>
       <div id="phoneVerifyDiv" style="display:none;">
-        <p style="text-align:center;color:#6B7280;font-size:13px;margin-bottom:10px;">Code wurde gesendet</p>
+        <p style="text-align:center;color:#6B7280;font-size:13px;margin-bottom:10px;">${LANG==='fa'?'کد ارسال شد':LANG==='az'?'Kod göndərildi':LANG==='en'?'Code sent':'Code wurde gesendet'}</p>
         <input class="m-input" type="number" id="loginOtp" placeholder="000000" style="text-align:center;font-size:22px;letter-spacing:8px;">
-        <button class="btn-msubmit" onclick="verifyOtpWeb()">✓ Bestätigen</button>
-        <button onclick="document.getElementById('phoneSendDiv').style.display='';document.getElementById('phoneVerifyDiv').style.display='none';" style="width:100%;padding:10px;background:none;border:none;color:#6B7280;cursor:pointer;font-size:13px;">← Nummer ändern</button>
+        <button class="btn-msubmit" onclick="verifyOtpWeb()">✓ ${LANG==='fa'?'تأیید':LANG==='az'?'Təsdiq':LANG==='en'?'Confirm':'Bestätigen'}</button>
+        <button onclick="document.getElementById('phoneSendDiv').style.display='';document.getElementById('phoneVerifyDiv').style.display='none';" style="width:100%;padding:10px;background:none;border:none;color:#6B7280;cursor:pointer;font-size:13px;">← ${LANG==='fa'?'تغییر شماره':LANG==='az'?'Nömrəni dəyiş':LANG==='en'?'Change number':'Nummer ändern'}</button>
       </div>
     </div>
     <div style="text-align:center;margin-top:12px;">
-      <button onclick="guestLogin()" style="background:none;border:1px solid #e5e7eb;border-radius:8px;padding:10px 20px;color:#6B7280;cursor:pointer;font-size:13px;width:100%;">👤 Als Gast fortfahren / مهمان</button>
+      <button onclick="guestLogin()" style="background:none;border:1px solid #e5e7eb;border-radius:8px;padding:10px 20px;color:#6B7280;cursor:pointer;font-size:13px;width:100%;">👤 ${LANG==='fa'?'ادامه به عنوان مهمان':LANG==='az'?'Qonaq kimi davam et':LANG==='en'?'Continue as Guest':'Als Gast fortfahren'}</button>
     </div>
     <div class="m-link" style="margin-top:10px;">${LANG==='fa'?'حساب ندارید؟':LANG==='az'?'Hesabınız yox?':LANG==='en'?'No account?':'Kein Konto?'} <a onclick="openModal('reg')">${t.nb2}</a></div>
-    <div style="text-align:center;margin-top:8px;"><a href="/privacy.html" style="color:#9CA3AF;font-size:11px;">🔒 Datenschutz</a></div>
+    <div style="text-align:center;margin-top:8px;"><a href="/privacy.html" style="color:#9CA3AF;font-size:11px;">🔒 ${LANG==='fa'?'حریم خصوصی':LANG==='az'?'Məxfilik':LANG==='en'?'Privacy':'Datenschutz'}</a></div>
     `;
   }else if(type==='reg'){
     html=`<h3 class="modal-h">${t.rgtitle}</h3><p class="modal-sub fa">${t.rgsub}</p>
@@ -1167,16 +1172,16 @@ function openModal(type){
     html=`<h3 class="modal-h">👤 ${USER.full_name||'Benutzer'}</h3>
     <p style="color:var(--gr);font-size:12px;margin-bottom:10px;">${USER.isGuest?'Gast / مهمان':USER.email}</p>
     <div style="background:var(--grl);border-radius:9px;padding:10px;margin-bottom:14px;display:flex;justify-content:space-between;">
-      <span>Status:</span><strong style="color:${USER.is_premium?'#16A34A':'var(--bl)'}">${USER.is_premium?'⭐ Premium':'🔵 Free'}</strong>
+      <span>${LANG==='fa'?'وضعیت':LANG==='az'?'Status':LANG==='en'?'Status':'Status'}:</span><strong style="color:${USER.is_premium?'#16A34A':'var(--bl)'}">${USER.is_premium?'⭐ Premium':'🔵 Free'}</strong>
     </div>
     ${!USER.isGuest?`<div style="margin-bottom:14px;">
-      <label style="font-size:11px;color:var(--gr);font-weight:600;">✏️ Name ändern</label>
+      <label style="font-size:11px;color:var(--gr);font-weight:600;">✏️ ${LANG==='fa'?'تغییر نام':LANG==='az'?'Adı dəyiş':LANG==='en'?'Change Name':'Name ändern'}</label>
       <input id="editNameInp" class="m-input" type="text" value="${USER.full_name||''}" placeholder="Name" style="margin-top:6px;">
-      <button onclick="saveProfileName()" style="width:100%;padding:9px;background:var(--bl);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;margin-top:6px;">💾 Speichern</button>
+      <button onclick="saveProfileName()" style="width:100%;padding:9px;background:var(--bl);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;margin-top:6px;">💾 ${LANG==='fa'?'ذخیره':LANG==='az'?'Yadda saxla':LANG==='en'?'Save':'Speichern'}</button>
     </div>`:''}
-    ${!USER.is_premium?`<button onclick="closeModal(true);goto('exam');" style="width:100%;padding:11px;background:var(--bl);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;margin-bottom:8px;">⭐ Premium kaufen</button>`:''}
-    <button onclick="confirmLogout()" style="width:100%;padding:12px;background:#FEF3C7;color:#92400E;border:1px solid #F59E0B;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;margin-bottom:8px;">🚪 Hesaptan Çık / Abmelden</button>
-    ${!USER.isGuest?`<button onclick="confirmDeleteAccount()" style="width:100%;padding:12px;background:#FEF2F2;color:#DC2626;border:1px solid #DC2626;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;">🗑️ Hesabı Sil / Konto löschen</button>`:''}
+    ${!USER.is_premium?`<button onclick="closeModal(true);goto('exam');" style="width:100%;padding:11px;background:var(--bl);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;margin-bottom:8px;">⭐ ${LANG==='fa'?'خرید پریمیوم':LANG==='az'?'Premium al':LANG==='en'?'Get Premium':'Premium kaufen'}</button>`:''}
+    <button onclick="confirmLogout()" style="width:100%;padding:12px;background:#FEF3C7;color:#92400E;border:1px solid #F59E0B;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;margin-bottom:8px;">🚪 ${LANG==='fa'?'خروج از حساب':LANG==='az'?'Hesabdan çıx':LANG==='en'?'Sign Out':'Abmelden'}</button>
+    ${!USER.isGuest?`<button onclick="confirmDeleteAccount()" style="width:100%;padding:12px;background:#FEF2F2;color:#DC2626;border:1px solid #DC2626;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;">🗑️ ${LANG==='fa'?'حذف حساب':LANG==='az'?'Hesabı sil':LANG==='en'?'Delete Account':'Konto löschen'}</button>`:''}
     `;
   }
   ge('modalContent').innerHTML=html;ge('modalBg').classList.add('open');
@@ -1215,7 +1220,13 @@ function guestLogin(){
 
 async function sendSmsCode(){
   const phone = document.getElementById('loginPhone').value.trim();
-  if(!phone){toast('Telefonnummer eingeben','err');return;}
+  const T = {
+    enterPhone: {de:'Telefonnummer eingeben',fa:'شماره تلفن را وارد کنید',az:'Telefon nömrəsi daxil edin',en:'Enter phone number'}[LANG],
+    smsSent: {de:'SMS gesendet!',fa:'پیامک ارسال شد!',az:'SMS göndərildi!',en:'SMS sent!'}[LANG],
+    error: {de:'Fehler',fa:'خطا',az:'Xəta',en:'Error'}[LANG],
+    connError: {de:'Verbindungsfehler',fa:'خطای اتصال',az:'Bağlantı xətası',en:'Connection error'}[LANG],
+  };
+  if(!phone){toast(T.enterPhone,'err');return;}
   try {
     const r = await fetch(SBURL+'/auth/v1/otp',{
       method:'POST',
@@ -1225,18 +1236,25 @@ async function sendSmsCode(){
     if(r.ok){
       document.getElementById('phoneSendDiv').style.display='none';
       document.getElementById('phoneVerifyDiv').style.display='';
-      toast('SMS gesendet!','ok');
+      toast(T.smsSent,'ok');
     } else {
       const e=await r.json();
-      toast(e.msg||'Fehler','err');
+      toast(e.msg||T.error,'err');
     }
-  }catch(e){toast('Verbindungsfehler','err');}
+  }catch(e){toast(T.connError,'err');}
 }
 
 async function verifyOtpWeb(){
   const phone = document.getElementById('loginPhone').value.trim();
   const token = document.getElementById('loginOtp').value.trim();
-  if(!token){toast('Code eingeben','err');return;}
+  const T = {
+    enterCode: {de:'Code eingeben',fa:'کد را وارد کنید',az:'Kodu daxil edin',en:'Enter code'}[LANG],
+    welcome: {de:'Willkommen',fa:'خوش آمدید',az:'Xoş gəldiniz',en:'Welcome'}[LANG],
+    wrongCode: {de:'Falscher Code',fa:'کد اشتباه',az:'Yanlış kod',en:'Wrong code'}[LANG],
+    connError: {de:'Verbindungsfehler',fa:'خطای اتصال',az:'Bağlantı xətası',en:'Connection error'}[LANG],
+    user: {de:'Benutzer',fa:'کاربر',az:'İstifadəçi',en:'User'}[LANG],
+  };
+  if(!token){toast(T.enterCode,'err');return;}
   try {
     const r = await fetch(SBURL+'/auth/v1/verify',{
       method:'POST',
@@ -1248,14 +1266,14 @@ async function verifyOtpWeb(){
       const ur = await sbReq('users?email=eq.'+encodeURIComponent(phone));
       let user = Array.isArray(ur) && ur[0];
       if(!user){
-        const cr = await sbReq('users','POST',{email:phone,full_name:'Benutzer '+phone.slice(-4),language:LANG,is_premium:false,created_at:new Date().toISOString()});
+        const cr = await sbReq('users','POST',{email:phone,full_name:T.user+' '+phone.slice(-4),language:LANG,is_premium:false,created_at:new Date().toISOString()});
         user = Array.isArray(cr) && cr[0];
       }
-      if(user){USER=user;closeModal(true);afterLogin();toast('Willkommen '+user.full_name+'!','ok');}
+      if(user){USER=user;closeModal(true);afterLogin();toast(T.welcome+' '+user.full_name+'!','ok');}
     } else {
-      toast(data.msg||'Falscher Code','err');
+      toast(data.msg||T.wrongCode,'err');
     }
-  }catch(e){toast('Verbindungsfehler','err');}
+  }catch(e){toast(T.connError,'err');}
 }
 
 async function doLogin(){
@@ -1303,24 +1321,33 @@ function toast(msg,type=''){
 
 function saveProfileName(){
   const name = document.getElementById('editNameInp')?.value?.trim();
-  if(!name){toast('Name eingeben','err');return;}
+  const T = {
+    enterName: {de:'Name eingeben',fa:'نام را وارد کنید',az:'Ad daxil edin',en:'Enter name'}[LANG],
+    saved: {de:'Gespeichert!',fa:'ذخیره شد!',az:'Yadda saxlanıldı!',en:'Saved!'}[LANG],
+  };
+  if(!name){toast(T.enterName,'err');return;}
   sbReq('users?id=eq.'+USER.id,'PATCH',{full_name:name}).then(r=>{
-    if(r){USER.full_name=name;localStorage.setItem('fr_user',JSON.stringify(USER));updateNavUser();toast('Gespeichert!','ok');}
+    if(r){USER.full_name=name;localStorage.setItem('fr_user',JSON.stringify(USER));updateNavUser();toast(T.saved,'ok');}
   });
 }
 
 function confirmLogout(){
-  if(confirm('Wirklich abmelden? / مطمئنی؟')){
-    if(confirm('Abmeldung bestätigen?')){doLogout();}
+  const msg1={de:'Wirklich abmelden?',fa:'واقعاً خارج می‌شوید؟',az:'Həqiqətən çıxmaq istəyirsiniz?',en:'Really sign out?'}[LANG]||'Wirklich abmelden?';
+  const msg2={de:'Abmeldung bestätigen?',fa:'خروج را تأیید می‌کنید؟',az:'Çıxışı təsdiqləyin?',en:'Confirm sign out?'}[LANG]||'Abmeldung bestätigen?';
+  if(confirm(msg1)){
+    if(confirm(msg2)){doLogout();}
   }
 }
 
 function confirmDeleteAccount(){
-  if(confirm('Konto wirklich löschen? Alle Daten werden gelöscht!')){
-    if(confirm('LETZTE WARNUNG: Endgültig löschen?')){
+  const msg1={de:'Konto wirklich löschen? Alle Daten werden gelöscht!',fa:'حساب کاربری حذف شود؟ تمام اطلاعات پاک خواهد شد!',az:'Hesab silinsin? Bütün məlumatlar silinəcək!',en:'Really delete account? All data will be deleted!'}[LANG]||'Konto wirklich löschen?';
+  const msg2={de:'LETZTE WARNUNG: Endgültig löschen?',fa:'هشدار آخر: برای همیشه حذف شود؟',az:'SON XƏBƏRDARLIQ: Həmişəlik silinsin?',en:'FINAL WARNING: Delete permanently?'}[LANG]||'LETZTE WARNUNG: Endgültig löschen?';
+  const msgOk={de:'Konto gelöscht',fa:'حساب حذف شد',az:'Hesab silindi',en:'Account deleted'}[LANG]||'Konto gelöscht';
+  if(confirm(msg1)){
+    if(confirm(msg2)){
       sbReq('users?id=eq.'+USER.id,'DELETE').then(()=>{
         doLogout();
-        toast('Konto gelöscht','ok');
+        toast(msgOk,'ok');
       });
     }
   }
@@ -1576,7 +1603,7 @@ async function stripeCheckout(){
 
 </script>
 <div style="text-align:center;padding:20px;border-top:1px solid #E5E7EB;margin-top:20px;">
-  <a href="/privacy.html" style="color:#6B7280;font-size:13px;text-decoration:none;">🔒 Datenschutz / حریم خصوصی / Gizlilik</a>
+  <a href="/privacy.html" style="color:#6B7280;font-size:13px;text-decoration:none;">🔒 ${LANG==='fa'?'حریم خصوصی':LANG==='az'?'Məxfilik':LANG==='en'?'Privacy':'Datenschutz'} / حریم خصوصی / Gizlilik</a>
   &nbsp;·&nbsp;
   <span style="color:#6B7280;font-size:13px;">© 2026 FahrReady</span>
 </div>
