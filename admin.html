@@ -306,6 +306,17 @@ tr:hover td{background:#FAFBFF;}
           <tbody id="tb-recent"><tr class="loading"><td colspan="5"><span class="spin"></span></td></tr></tbody>
         </table></div>
       </div>
+
+      <div class="card">
+        <div class="card-head"><div class="card-title">⚙️ Ayarlar</div></div>
+        <div style="padding:0 4px;">
+          <label style="font-size:12px;font-weight:600;color:#6B7280;">📱 Android Play Store Linki</label>
+          <div style="display:flex;gap:8px;margin-top:6px;">
+            <input id="androidLinkInput" type="text" placeholder="https://play.google.com/store/apps/details?id=..." style="flex:1;padding:10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;">
+            <button class="btn primary" onclick="saveAndroidLink()">💾 Kaydet</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- SORULAR -->
@@ -606,6 +617,7 @@ function goTab(name, el){
 // DASHBOARD
 // ═══════════════════════════════════
 async function loadDashboard(){
+  loadAndroidLink();
   const [u,p,q,e] = await Promise.all([
     api('users?select=id,is_premium'),
     api('payments?select=id,status'),
@@ -648,6 +660,26 @@ async function loadDashboard(){
 // ═══════════════════════════════════
 // PAYMENTS
 // ═══════════════════════════════════
+
+async function loadAndroidLink(){
+  const r = await api('settings?key=eq.android_store_url&select=value');
+  if(r.ok && Array.isArray(r.data) && r.data[0]){
+    document.getElementById('androidLinkInput').value = r.data[0].value;
+  }
+}
+
+async function saveAndroidLink(){
+  const url = document.getElementById('androidLinkInput').value.trim();
+  if(!url){toast('Link giriniz','err');return;}
+  const check = await api('settings?key=eq.android_store_url&select=key');
+  if(check.ok && Array.isArray(check.data) && check.data.length>0){
+    await api('settings?key=eq.android_store_url','PATCH',{value:url});
+  } else {
+    await api('settings','POST',{key:'android_store_url',value:url});
+  }
+  toast('Link kaydedildi! ✓','ok');
+}
+
 async function loadPayments(){
   document.getElementById('tb-pay').innerHTML='<tr class="loading"><td colspan="7"><span class="spin"></span></td></tr>';
   const r = await api('payments?order=created_at.desc&limit=300');
@@ -1217,6 +1249,9 @@ async function mConfirm(){
     toast(r.ok?'Ban kaldırıldı':'Hata',r.ok?'ok':'err'); closeModal(); loadUsers();
   }
   else if(mAction==='delUser'){
+    // Delete related records first (foreign key constraints)
+    await api('exam_results?user_id=eq.'+id,'DELETE');
+    await api('payments?user_id=eq.'+id,'DELETE');
     const r=await api('users?id=eq.'+id,'DELETE');
     toast(r.ok?'Kullanıcı silindi':'Hata',r.ok?'ok':'err'); closeModal(); loadUsers();
   }

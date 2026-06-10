@@ -711,11 +711,36 @@ footer{background:#060616;color:rgba(255,255,255,.5);padding:38px 5%;text-align:
     <a href="/privacy.html" id="fle">Datenschutz</a>
     <a href="#" id="flf">Kontakt</a>
   </div>
-  <div class="ft-apps" style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap;">
-    <a href="https://github.com/Mahdinrm/FahrReady/releases/latest" target="_blank" style="display:flex;align-items:center;gap:6px;background:#1A1A2E;color:#fff;padding:8px 16px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:600;">
-      📱 Android APK
+  <div class="ft-apps" style="display:flex;gap:14px;justify-content:center;margin-top:24px;flex-wrap:wrap;">
+    <a href="https://play.google.com/store/apps/details?id=com.mahdi.mindflow" target="_blank" class="store-badge android-badge">
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24c-1.43-.65-3.04-1.01-4.74-1.01-1.7 0-3.31.36-4.74 1.01L5.11 5.67c-.18-.28-.54-.37-.83-.22-.3.16-.42.54-.26.85L5.86 9.48C3.16 11.15 1.31 14.18 1 17.66h22c-.31-3.48-2.16-6.51-4.86-8.18zM7.5 15.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+      <div class="store-text">
+        <span class="store-small">DOWNLOAD ON</span>
+        <span class="store-big">Google Play</span>
+      </div>
+    </a>
+    <a href="#" onclick="alert('iOS Version coming soon! / به‌زودی برای آیفون');return false;" class="store-badge ios-badge">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.5 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.82M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      <div class="store-text">
+        <span class="store-small">COMING SOON</span>
+        <span class="store-big">App Store</span>
+      </div>
     </a>
   </div>
+  <style>
+    .store-badge{display:flex;align-items:center;gap:10px;background:#0A0A1A;color:#fff;padding:10px 20px;border-radius:12px;text-decoration:none;border:1px solid #2D2D4E;transition:all .25s ease;position:relative;overflow:hidden;}
+    .store-badge::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);transition:left .5s;}
+    .store-badge:hover::before{left:100%;}
+    .store-badge:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(27,79,216,0.35);border-color:#1B4FD8;}
+    .store-badge svg{flex-shrink:0;}
+    .store-text{display:flex;flex-direction:column;line-height:1.2;text-align:left;}
+    .store-small{font-size:9px;opacity:0.7;letter-spacing:1px;}
+    .store-big{font-size:15px;font-weight:700;}
+    .ios-badge{opacity:0.6;cursor:not-allowed;}
+    .ios-badge:hover{transform:none;box-shadow:none;border-color:#2D2D4E;}
+    .ios-badge:hover::before{left:-100%;}
+    @media (prefers-reduced-motion: reduce){.store-badge{transition:none;}.store-badge::before{display:none;}}
+  </style>
   <div class="ft-copy">© 2025 FahrReady.ch 🇨🇭 · <span id="ftcopy">Alle Rechte vorbehalten</span></div>
 </footer>
 
@@ -1357,6 +1382,17 @@ function confirmDeleteAccount(){
 
 // ── INIT ──────────────────────────────────────────────────
 loadUser();
+loadAppLink();
+
+async function loadAppLink(){
+  try{
+    const r = await sbReq('settings?key=eq.android_store_url');
+    if(Array.isArray(r)&&r[0]?.value){
+      const link = document.getElementById('androidStoreLink');
+      if(link) link.href = r[0].value;
+    }
+  }catch(e){}
+}
 setL('de');
 
 // ── SUPABASE QUESTION LOADER ───────────────────────
