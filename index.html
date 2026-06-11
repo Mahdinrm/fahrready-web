@@ -540,7 +540,7 @@ footer::before{
     </div>
     <div class="pbar" id="pBar"></div>
     <div id="pMulti" style="display:none;background:#FEF9E7;border:1px solid #F59E0B;border-radius:8px;padding:6px 12px;font-size:11px;color:#92700A;margin-bottom:10px;">⚠️ Mehrere Antworten möglich!</div>
-    <img id="pImg" class="ex-qimg" alt="" style="display:none;">
+    <img id="pImg" alt="" style="display:none;width:100%;max-height:200px;object-fit:contain;border-radius:12px;margin-bottom:14px;border:1px solid #E5E7EB;background:#F8FAFF;">
     <div class="pq" id="pQ"></div>
     <div id="pOpts"></div>
     <div class="pfb" id="pFb"></div>
@@ -1810,45 +1810,61 @@ function pLoad(){
     d2.textContent=q[LANG];
     qEl.appendChild(d2);
   }
-  var isRTL=(LANG==='fa'||LANG==='az');
   var optsEl=document.getElementById('pOpts');
-  optsEl.className='ex-options';
   optsEl.innerHTML='';
   q.opts.forEach(function(o,i){
     var d=document.createElement('div');
-    d.className='ex-opt';
+    d.className='popt';
     d.setAttribute('data-i',i);
     var letter=['A','B','C','D'][i]||'';
-    var sub=o[LANG]||o.fa||'';
-    var subHtml = sub ? '<div class="ex-opt-sub" style="'+(isRTL?"font-family:'Vazirmatn',sans-serif;direction:rtl;":'')+'">'+sub+'</div>' : '';
-    d.innerHTML='<div class="ex-opt-letter">'+letter+'</div><div><div>'+o.de+'</div>'+subHtml+'</div>';
+    var subTxt=(LANG!=='de'&&o[LANG])?'<div style="font-size:11px;color:#6B7280;margin-top:2px;direction:'+(LANG==='fa'||LANG==='az'?'rtl':'ltr')+'">'+o[LANG]+'</div>':'';
+    d.innerHTML='<div class="pltr">'+letter+'</div><div style="font-size:13px;color:#0f172a;font-weight:500;">'+o.de+subTxt+'</div>';
     d.onclick=function(){pSel(d,i);};
     optsEl.appendChild(d);
   });
   document.getElementById('pFb').style.display='none';
-
-  // Confirm / Next button
   var btn=document.getElementById('pBtn');
-  btn.style.cssText='width:100%;padding:12px;background:var(--bl);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-top:10px;display:none;';
-  btn.textContent='✓ '+(LANG==='fa'?'تأیید':LANG==='az'?'Təsdiq':LANG==='en'?'Confirm':'Bestätigen');
-  btn.className='';
-  btn.onclick=pConfirm;
+  btn.textContent='Weiter →';
+  btn.className='pbtn';
+  btn.onclick=pWeiter;
 }
 
 function pSel(el,i){
   if(PREV)return;
   if(PSEL.includes(i)){
     PSEL=PSEL.filter(function(x){return x!==i;});
-    el.classList.remove('selected');
+    el.classList.remove('sel');
   }else{
     PSEL.push(i);
-    el.classList.add('selected');
+    el.classList.add('sel');
   }
-  document.getElementById('pBtn').style.display=PSEL.length>0?'block':'none';
+  document.getElementById('pBtn').className=PSEL.length>0?'pbtn on':'pbtn';
 }
 
-function pConfirm(){
-  if(PREV||PSEL.length===0)return;
+function pWeiter(){
+  if(PREV){
+    PI++;PSEL=[];PREV=false;
+    document.getElementById('pFb').style.display='none';
+    var btn=document.getElementById('pBtn');
+    btn.textContent='Weiter →';btn.className='pbtn';btn.onclick=pWeiter;
+    if(PI>0&&PI%10===0&&PI<PQ.length){
+      var bs=PI-10;
+      var ok=PRES.slice(bs,PI).filter(Boolean).length;
+      var pct=Math.round(ok/10*100);
+      document.getElementById('pBN').textContent=Math.ceil(PI/10);
+      document.getElementById('pBP').textContent=pct+'%';
+      document.getElementById('pBO').textContent=ok;
+      document.getElementById('pBlock').style.background=pct>=70?'#DCFCE7':'#FEF9E7';
+      pShow('pBlock');
+    }else{pLoad();}
+    return;
+  }
+  if(PSEL.length===0){
+    var fb=document.getElementById('pFb');
+    fb.style.display='block';fb.style.background='#FEF9E7';fb.style.color='#92700A';
+    fb.textContent='⚠️ Bitte zuerst eine Antwort wählen!';
+    return;
+  }
   PREV=true;
   var q=PQ[PI];var opts=q.opts;
   var ci=opts.map(function(o,i){return o.ok?i:-1;}).filter(function(i){return i>=0;});
@@ -1860,31 +1876,18 @@ function pConfirm(){
   pBarDraw();
   document.getElementById('pOk').textContent='✓ '+POK;
   document.getElementById('pErr').textContent='✗ '+PERR;
-  document.querySelectorAll('#pOpts .ex-opt').forEach(function(d,i){
+  document.querySelectorAll('.popt').forEach(function(d,i){
     d.onclick=null;d.style.cursor='default';
-    d.classList.remove('selected');
-    if(opts[i].ok){d.classList.add('correct');}
-    else if(PSEL.includes(i)){d.classList.add('wrong');}
+    if(opts[i].ok){d.classList.add('ok');}
+    else if(PSEL.includes(i)){d.classList.add('no');}
   });
+  var fb=document.getElementById('pFb');
+  fb.style.display='block';
+  fb.style.background=correct?'#DCFCE7':'#FEF2F2';
+  fb.style.color=correct?'#16A34A':'#DC2626';
+  fb.textContent=correct?'✓ Richtig!':'✗ Falsch! Richtig: '+opts.filter(function(o){return o.ok;}).map(function(o){return o.de;}).join(' + ');
   var btn=document.getElementById('pBtn');
-  btn.style.display='block';
-  btn.textContent=(LANG==='fa'?'سوال بعدی':LANG==='az'?'Növbəti sual':LANG==='en'?'Next question':'Nächste Frage')+' →';
-  btn.onclick=pWeiter;
-}
-
-function pWeiter(){
-  PI++;PSEL=[];PREV=false;
-  document.getElementById('pFb').style.display='none';
-  if(PI>0&&PI%10===0&&PI<PQ.length){
-    var bs=PI-10;
-    var ok=PRES.slice(bs,PI).filter(Boolean).length;
-    var pct=Math.round(ok/10*100);
-    document.getElementById('pBN').textContent=Math.ceil(PI/10);
-    document.getElementById('pBP').textContent=pct+'%';
-    document.getElementById('pBO').textContent=ok;
-    document.getElementById('pBlock').style.background=pct>=70?'#DCFCE7':'#FEF9E7';
-    pShow('pBlock');
-  }else{pLoad();}
+  btn.textContent='Nächste Frage →';btn.className='pbtn on';
 }
 
 function pCont(){
