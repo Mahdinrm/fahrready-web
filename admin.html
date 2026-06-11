@@ -1017,8 +1017,11 @@ function buildNewsModal(n, editId=null){
     <label class="mlabel">Başlık — İngilizce</label><input class="minp" id="nen" value="${n?n.title_en||'':''}">
 
     <div class="msec">
-      <label class="mlabel">İçerik (Devamı) — Almanca</label>
-      <textarea class="mta" id="ncde" rows="4">${n?n.content_de||'':''}</textarea>
+      <div style="position:relative;">
+        <label class="mlabel">İçerik (Devamı) — Almanca</label>
+        <textarea class="mta" id="ncde" rows="4">${n?n.content_de||'':''}</textarea>
+        <button class="trans-btn" onclick="autoTranslateNewsContent()" title="İçeriği 4 dile çevir" style="position:absolute;right:8px;top:30px;background:none;border:none;font-size:18px;cursor:pointer;">🌐</button>
+      </div>
       <label class="mlabel">İçerik — Farsça</label>
       <textarea class="mta" id="ncfa" rows="4">${n?n.content_fa||'':''}</textarea>
       <label class="mlabel">İçerik — Azerbaycanca</label>
@@ -1328,12 +1331,19 @@ async function autoTranslate(sourceEl, faEl, azEl, enEl){
     translateText(text, 'en'),
   ]);
   
-  if(faEl && !faEl.value) faEl.value = fa;
-  if(azEl && !azEl.value) azEl.value = az;
-  if(enEl && !enEl.value) enEl.value = en;
+  if(faEl && fa) faEl.value = fa;
+  if(azEl && az) azEl.value = az;
+  if(enEl && en) enEl.value = en;
+  if(!fa && !az && !en) toast('Çeviri servisi yanıt vermedi','err');
   
   sourceEl.disabled=false;
   if(btn) btn.textContent='🌐';
+}
+
+async function autoTranslateNewsContent(){
+  const cde=document.getElementById('ncde'), cfa=document.getElementById('ncfa'), caz=document.getElementById('ncaz'), cen=document.getElementById('ncen');
+  if(!cde.value.trim()){toast('Önce Almanca içerik yazın','err');return;}
+  await autoTranslate(cde, cfa, caz, cen);
 }
 
 async function autoTranslateNews(){
