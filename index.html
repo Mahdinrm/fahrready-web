@@ -8,7 +8,80 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:#fff;color:#111;overflow-x:hidden;}
-:root{--bl:#1B4FD8;--bld:#1239A0;--bll:#EEF2FF;--gr:#6B7280;--grl:#F3F4F6;--grb:#E5E7EB;--gn:#16A34A;--gnl:#DCFCE7;--rd:#DC2626;--rdl:#FEF2F2;--gd:#D4AC0D;}
+:root{--bl:#1B4FD8;--bld:#1239A0;--bll:#EEF2FF;--gr:#6B7280;--grl:#F3F4F6;--grb:#E5E7EB;--gn:#16A34A;--gnl:#DCFCE7;--rd:#DC2626;--rdl:#FEF2F2;--gd:#D4AC0D;--bg:#fff;--txt:#111;--card:#fff;--navbg:rgba(255,255,255,.97);}
+[data-theme="dark"]{--bl:#3B6EFF;--bld:#1239A0;--bll:#1a2547;--gr:#94A3B8;--grl:#1E293B;--grb:#334155;--gn:#22C55E;--gnl:#14301f;--rd:#F87171;--rdl:#3a1e1e;--gd:#FACC15;--bg:#0B1120;--txt:#E2E8F0;--card:#161E2E;--navbg:rgba(15,23,42,.95);}
+[data-theme="dark"] body{background:var(--bg);color:var(--txt);}
+[data-theme="dark"] nav{background:var(--navbg)!important;}
+[data-theme="dark"] .modal-box,[data-theme="dark"] .plan-card,[data-theme="dark"] .ex-opt,[data-theme="dark"] .news-card,[data-theme="dark"] .pbox{background:var(--card)!important;color:var(--txt);}
+[data-theme="dark"] .m-input{background:var(--grl)!important;color:var(--txt)!important;border-color:var(--grb)!important;}
+[data-theme="dark"] .section.gray{background:var(--grl)!important;}
+[data-theme="dark"] .section.gold{background:#2a2410!important;}
+[data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] .ptitle{color:var(--txt)!important;}
+.theme-toggle{background:var(--grl);border:1px solid var(--grb);border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:transform .3s;}
+.theme-toggle:hover{transform:rotate(20deg) scale(1.1);}
+[data-theme="dark"] .theme-toggle{background:var(--card);border-color:var(--grb);}
+/* ── DARK MODE: COMPREHENSIVE OVERRIDES ─────────────── */
+[data-theme="dark"] .section.gray,
+[data-theme="dark"] .section{background:var(--bg)!important;}
+[data-theme="dark"] .section.gray{background:#0F1A33!important;}
+[data-theme="dark"] .section.gold{background:#241E08!important;}
+[data-theme="dark"] .hero-h1,[data-theme="dark"] .sec-h2,[data-theme="dark"] .ex-qtext,
+[data-theme="dark"] .news-title,[data-theme="dark"] .news-card-title,[data-theme="dark"] .feat-title,
+[data-theme="dark"] .plan-name,[data-theme="dark"] .pq,[data-theme="dark"] .modal-h,
+[data-theme="dark"] .pbox-ttl,[data-theme="dark"] .reg-h,[data-theme="dark"] .res-title,
+[data-theme="dark"] .ex-header,[data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{
+  color:var(--txt)!important;
+}
+[data-theme="dark"] .feat-card,[data-theme="dark"] .news-card,[data-theme="dark"] .news-main,
+[data-theme="dark"] .plan-card,[data-theme="dark"] .pbox,[data-theme="dark"] .modal-box,
+[data-theme="dark"] .ex-opt,[data-theme="dark"] .iban-num,[data-theme="dark"] .exam-wrap,
+[data-theme="dark"] .pimg,[data-theme="dark"] .mbr-pill{
+  background:var(--card)!important;
+  border-color:var(--grb)!important;
+  color:var(--txt)!important;
+}
+[data-theme="dark"] .ex-opt-letter{background:var(--grl)!important;color:var(--bl)!important;}
+[data-theme="dark"] .ex-opt.correct{background:var(--gnl)!important;border-color:var(--gn)!important;}
+[data-theme="dark"] .ex-opt.wrong{background:var(--rdl)!important;border-color:var(--rd)!important;}
+[data-theme="dark"] .ex-opt.selected{background:var(--bll)!important;border-color:var(--bl)!important;}
+[data-theme="dark"] .btn-secondary{background:var(--grl)!important;color:var(--txt)!important;border-color:var(--grb)!important;}
+[data-theme="dark"] .btn-retry{background:var(--grl)!important;color:var(--txt)!important;}
+[data-theme="dark"] .pbtn,[data-theme="dark"] .popt{background:var(--card)!important;color:var(--txt)!important;border-color:var(--grb)!important;}
+[data-theme="dark"] .pbox-close{background:var(--grl)!important;color:var(--txt)!important;border-color:var(--grb)!important;}
+[data-theme="dark"] .blue-grad{background:linear-gradient(135deg,var(--bld) 0%,#0a1530 100%)!important;}
+[data-theme="dark"] .ex-score-n{color:var(--txt)!important;}
+[data-theme="dark"] .ex-score-n.g{color:var(--gn)!important;}
+[data-theme="dark"] .ex-score-n.r{color:var(--rd)!important;}
+[data-theme="dark"] .reg-label,[data-theme="dark"] .news-fa,[data-theme="dark"] .modal-sub,
+[data-theme="dark"] .pq-sub,[data-theme="dark"] .feat-fa,[data-theme="dark"] p{color:var(--gr)!important;}
+[data-theme="dark"] .lang-btn{color:var(--gr)!important;border-color:var(--grb)!important;}
+[data-theme="dark"] .lang-btn.on{background:var(--bl)!important;color:#fff!important;}
+[data-theme="dark"] .btn-in{border-color:var(--bl)!important;color:var(--bl)!important;}
+[data-theme="dark"] .m-link,[data-theme="dark"] .m-link a{color:var(--gr)!important;}
+[data-theme="dark"] .news-card-sub,[data-theme="dark"] .albl{color:var(--gr)!important;}
+[data-theme="dark"] .toast{background:var(--card)!important;color:var(--txt)!important;border-color:var(--grb)!important;}
+[data-theme="dark"] .adbar{background:var(--grl)!important;color:var(--txt)!important;}
+[data-theme="dark"] .mbr-name{color:var(--txt)!important;}
+[data-theme="dark"] input,[data-theme="dark"] select,[data-theme="dark"] textarea{
+  background:var(--grl)!important;color:var(--txt)!important;border-color:var(--grb)!important;
+}
+[data-theme="dark"] ::placeholder{color:var(--gr)!important;opacity:0.7;}
+[data-theme="dark"] [style*="color:#0f172a"],
+[data-theme="dark"] [style*="color:#0F172A"],
+[data-theme="dark"] [style*="color:#111"],
+[data-theme="dark"] [style*="color: #0f172a"],
+[data-theme="dark"] [style*="color: #111"]{
+  color:var(--txt)!important;
+}
+[data-theme="dark"] [style*="background:#fff"],
+[data-theme="dark"] [style*="background: #fff"],
+[data-theme="dark"] [style*="background:white"],
+[data-theme="dark"] [style*="background-color:#fff"]{
+  background:var(--card)!important;
+}
+
+[data-theme="dark"] .hero{background:linear-gradient(135deg,var(--bg) 0%,#0F1A33 55%,var(--bg) 100%)!important;}
+
 ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:var(--bl);border-radius:3px;}
 
 /* NAV */
@@ -270,13 +343,47 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(255,255,255,
 
 /* FOOTER */
 footer{background:#060616;color:rgba(255,255,255,.5);padding:38px 5%;text-align:center;}
-.ft-logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;}
+footer{
+  position:relative;
+  background:radial-gradient(ellipse at top,#13133a 0%,#05050f 70%);
+  padding:70px 5% 28px;
+  text-align:center;
+  overflow:hidden;
+  isolation:isolate;
+}
+footer::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,#1B4FD8,#7C3AED,#16A34A,#D97706,#1B4FD8);
+  background-size:300% 100%;
+  animation:footerGradient 8s linear infinite;
+  z-index:2;
+}
+@keyframes footerGradient{
+  0%{background-position:0% 0%;}
+  100%{background-position:300% 0%;}
+}
+.ft-orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:.35;z-index:0;pointer-events:none;}
+.ft-orb1{width:280px;height:280px;background:#1B4FD8;top:-100px;left:-60px;animation:ftFloat1 14s ease-in-out infinite;}
+.ft-orb2{width:220px;height:220px;background:#7C3AED;bottom:-80px;right:-40px;animation:ftFloat2 16s ease-in-out infinite;}
+.ft-orb3{width:180px;height:180px;background:#16A34A;bottom:20px;left:40%;animation:ftFloat3 18s ease-in-out infinite;}
+@keyframes ftFloat1{0%,100%{transform:translate(0,0);}50%{transform:translate(60px,40px);}}
+@keyframes ftFloat2{0%,100%{transform:translate(0,0);}50%{transform:translate(-50px,-30px);}}
+@keyframes ftFloat3{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(30px,-20px) scale(1.15);}}
+.ft-content{position:relative;z-index:1;max-width:600px;margin:0 auto;}
+.ft-logo-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;}
+.ft-logo-icon{font-size:30px;animation:ftBounce 3s ease-in-out infinite;}
+@keyframes ftBounce{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-6px) rotate(-8deg);}}
+.ft-logo{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:#fff;}
+.ft-tagline{color:rgba(255,255,255,.55);font-size:13px;margin:8px 0 28px;}
 .ft-logo span{color:var(--bl);}
 .ft-fa{font-family:'Vazirmatn',sans-serif;font-size:11px;direction:rtl;margin-bottom:16px;}
 .ft-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;}
-.ft-links a{color:rgba(255,255,255,.4);text-decoration:none;font-size:11px;cursor:pointer;}
-.ft-links a:hover{color:var(--bl);}
-.ft-copy{font-size:9px;color:rgba(255,255,255,.2);padding-top:16px;border-top:1px solid rgba(255,255,255,.06);}
+.ft-links a{color:rgba(255,255,255,.5);text-decoration:none;font-size:12px;cursor:pointer;position:relative;padding-bottom:3px;transition:color .25s;}
+.ft-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:#1B4FD8;transition:width .3s;}
+.ft-links a:hover{color:#fff;}
+.ft-links a:hover::after{width:100%;}
+.ft-copy{font-size:10px;color:rgba(255,255,255,.25);padding-top:20px;margin-top:24px;border-top:1px solid rgba(255,255,255,.08);}
 
 /* FADE IN */
 .fadein{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s;}
@@ -332,6 +439,7 @@ footer{background:#060616;color:rgba(255,255,255,.5);padding:38px 5%;text-align:
     <li><a onclick="goto('reg')" id="nl4">Registrieren</a></li>
   </ul>
   <div class="n-right">
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Theme">🌙</button>
     <div class="lang-wrap">
       <button class="lang-btn" onclick="setL('fa')">FA</button>
       <button class="lang-btn" onclick="setL('az')">AZ</button>
@@ -574,7 +682,7 @@ footer{background:#060616;color:rgba(255,255,255,.5);padding:38px 5%;text-align:
 <section class="section gray" id="exam">
   <span class="sec-tag" id="etag">PRÜFUNGSSIMULATOR</span>
   <h2 class="sec-h2" id="etitle">Theorieprüfung simulieren</h2>
-  <p class="sec-sub fa" id="esub">۵ سوال رایگان — بعد نیاز به اشتراک ویژه</p>
+  <p class="sec-sub" id="esub">Nur 5 kostenlose Fragen — danach Premium nötig</p>
 
   <div class="exam-wrap">
 
@@ -631,7 +739,7 @@ footer{background:#060616;color:rgba(255,255,255,.5);padding:38px 5%;text-align:
       <div class="screen">
         <div class="screen-icon">🔒</div>
         <h3 class="screen-title" id="pwTitle">Premium erforderlich</h3>
-        <p class="screen-fa" id="pwFa">۵ سوال رایگان تمام شد — برای ادامه اشتراک بخرید</p>
+        <p class="screen-fa" id="pwFa">Deine 5 kostenlosen Fragen sind aufgebraucht — Premium benötigt</p>
         <div class="plan-grid">
           <div class="plan-card" onclick="selectPlan(this,'m')" data-plan="m">
             <div class="plan-name" id="pln1">Monatlich</div>
@@ -700,48 +808,141 @@ footer{background:#060616;color:rgba(255,255,255,.5);padding:38px 5%;text-align:
 </div>
 
 <!-- FOOTER -->
+<section class="app-cta">
+  <div class="app-cta-bg">
+    <div class="ft-orb ft-orb1"></div>
+    <div class="ft-orb ft-orb2"></div>
+  </div>
+  <div class="app-cta-inner">
+    <div class="app-cta-text">
+      <span class="app-cta-eyebrow">📲 MOBILE APP</span>
+      <h2>Lerne überall —<br>auch offline.</h2>
+      <p>Hol dir FahrReady für Android und übe deine Theorieprüfung wo und wann du willst.</p>
+      <div class="store-row">
+        <a href="https://play.google.com/apps/internaltest/4701252520678373485" target="_blank" class="store-badge android-badge" id="androidStoreLink">
+          <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24c-1.43-.65-3.04-1.01-4.74-1.01-1.7 0-3.31.36-4.74 1.01L5.11 5.67c-.18-.28-.54-.37-.83-.22-.3.16-.42.54-.26.85L5.86 9.48C3.16 11.15 1.31 14.18 1 17.66h22c-.31-3.48-2.16-6.51-4.86-8.18zM7.5 15.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+          <div class="store-text">
+            <span class="store-small">Jetzt verfügbar auf</span>
+            <span class="store-big">Google Play</span>
+          </div>
+        </a>
+        <a href="#" onclick="alert('iOS-Version kommt bald!');return false;" class="store-badge ios-badge">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.5 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.82M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <div class="store-text">
+            <span class="store-small">Demnächst auf</span>
+            <span class="store-big">App Store</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="app-cta-phone">
+      <div class="phone-mock">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-app-icon">🚗</div>
+          <div class="phone-title">FahrReady</div>
+          <div class="phone-bar phone-bar-green"></div>
+          <div class="phone-bar"></div>
+          <div class="phone-bar"></div>
+          <div class="phone-card">
+            <div class="phone-card-row"><span>✓</span><span>9</span></div>
+            <div class="phone-card-row"><span>✗</span><span>2</span></div>
+          </div>
+          <div class="phone-cta">Prüfung starten</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<style>
+/* APP CTA SECTION */
+.app-cta{position:relative;background:radial-gradient(ellipse at top left,#1B4FD8 0%,#0A1A4D 60%,#070718 100%);overflow:hidden;padding:80px 5%;}
+.app-cta-bg{position:absolute;inset:0;z-index:0;}
+.app-cta-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:60px;flex-wrap:wrap;}
+.app-cta-text{flex:1;min-width:300px;}
+.app-cta-eyebrow{display:inline-block;color:#93c5fd;font-size:12px;font-weight:800;letter-spacing:3px;margin-bottom:16px;}
+.app-cta-text h2{color:#fff;font-size:42px;font-weight:900;line-height:1.15;margin-bottom:18px;}
+.app-cta-text p{color:rgba(255,255,255,.7);font-size:16px;margin-bottom:32px;max-width:400px;}
+.store-row{display:flex;gap:14px;flex-wrap:wrap;}
+
+/* PHONE MOCKUP */
+.app-cta-phone{flex-shrink:0;display:flex;justify-content:center;}
+.phone-mock{
+  width:230px;height:470px;background:#0A0A1A;border-radius:36px;
+  border:6px solid #1c1c2e;box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.05);
+  position:relative;padding:14px;
+  animation:phoneFloat 5s ease-in-out infinite;
+}
+@keyframes phoneFloat{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-16px) rotate(0deg);}}
+.phone-notch{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:80px;height:18px;background:#0A0A1A;border-radius:0 0 14px 14px;z-index:2;}
+.phone-screen{
+  background:linear-gradient(160deg,#1B4FD8 0%,#0E2A6B 100%);
+  border-radius:24px;height:100%;padding:36px 16px 16px;
+  display:flex;flex-direction:column;align-items:center;color:#fff;
+}
+.phone-app-icon{font-size:36px;margin-bottom:6px;animation:ftBounce 3s ease-in-out infinite;}
+.phone-title{font-weight:900;font-size:16px;margin-bottom:18px;font-family:'Playfair Display',serif;}
+.phone-bar{width:100%;height:14px;border-radius:7px;background:rgba(255,255,255,.15);margin-bottom:10px;}
+.phone-bar:nth-child(4){width:80%;}
+.phone-bar:nth-child(5){width:60%;}
+.phone-bar-green{background:#16A34A!important;width:100%!important;}
+.phone-card{
+  width:100%;background:rgba(255,255,255,.08);border-radius:12px;padding:10px 14px;margin:14px 0;
+}
+.phone-card-row{display:flex;justify-content:space-between;font-size:13px;font-weight:700;padding:3px 0;}
+.phone-card-row:first-child span:first-child{color:#4ade80;}
+.phone-card-row:last-child span:first-child{color:#f87171;}
+.phone-cta{
+  margin-top:auto;width:100%;background:#fff;color:#1B4FD8;text-align:center;
+  font-weight:800;font-size:13px;padding:12px;border-radius:12px;
+}
+
+@media (max-width:768px){
+  .app-cta-inner{flex-direction:column;text-align:center;}
+  .app-cta-text p{margin-left:auto;margin-right:auto;}
+  .store-row{justify-content:center;}
+  .app-cta-text h2{font-size:32px;}
+}
+
+  .store-badge{display:flex;align-items:center;gap:14px;background:#0A0A1A;color:#fff;padding:18px 32px;border-radius:18px;text-decoration:none;border:2px solid rgba(255,255,255,0.15);transition:all .25s ease;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.25);}
+  .store-badge::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);transition:left .5s;}
+  .store-badge:hover::before{left:100%;}
+  .store-badge:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 12px 32px rgba(0,0,0,0.4);border-color:#fff;}
+  .store-badge svg{flex-shrink:0;}
+  .store-text{display:flex;flex-direction:column;line-height:1.3;text-align:left;}
+  .store-small{font-size:10px;opacity:0.7;letter-spacing:1.5px;font-weight:600;}
+  .store-big{font-size:20px;font-weight:800;}
+  .ios-badge{opacity:0.55;cursor:not-allowed;}
+  .ios-badge:hover{transform:none;box-shadow:0 8px 24px rgba(0,0,0,0.25);border-color:rgba(255,255,255,0.15);}
+  .ios-badge:hover::before{left:-100%;}
+  @media (max-width:600px){
+    .store-badge{padding:14px 20px;width:100%;max-width:320px;justify-content:center;}
+  }
+  @media (prefers-reduced-motion: reduce){.store-badge{transition:none;}.store-badge::before{display:none;}}
+</style>
+
 <footer>
-  <div class="ft-logo">Fahr<span>Ready</span></div>
-  <p class="ft-fa" id="ftfa">بهترین پلتفرم آمادگی برای آزمون رانندگی سوئیس — برای فارسی‌زبانان و آذربایجانی‌ها</p>
-  <div class="ft-links">
-    <a onclick="goto('home')" id="fla">Startseite</a>
-    <a onclick="goto('exam')" id="flb">Prüfung</a>
-    <a onclick="goto('news')" id="flc">Nachrichten</a>
-    <a onclick="goto('reg')" id="fld">Registrieren</a>
-    <a href="/privacy.html" id="fle">Datenschutz</a>
-    <a href="#" id="flf">Kontakt</a>
+  <div class="ft-orb ft-orb1"></div>
+  <div class="ft-orb ft-orb2"></div>
+  <div class="ft-orb ft-orb3"></div>
+  <div class="ft-content">
+    <div class="ft-logo-row">
+      <div class="ft-logo-icon">🚗</div>
+      <div class="ft-logo">Fahr<span>Ready</span></div>
+    </div>
+    <p class="ft-tagline">Deine Schweizer Theorieprüfung — einfach, smart, mehrsprachig.</p>
+    <div class="ft-links">
+      <a onclick="goto('home')" id="fla">Startseite</a>
+      <a onclick="goto('exam')" id="flb">Prüfung</a>
+      <a onclick="goto('news')" id="flc">Nachrichten</a>
+      <a onclick="goto('reg')" id="fld">Registrieren</a>
+      <a href="/privacy.html" id="fle">Datenschutz</a>
+      <a href="#" id="flf">Kontakt</a>
+    </div>
+    <div class="ft-copy">© 2026 FahrReady.ch 🇨🇭 · <span id="ftcopy">Alle Rechte vorbehalten</span></div>
   </div>
-  <div class="ft-apps" style="display:flex;gap:14px;justify-content:center;margin-top:24px;flex-wrap:wrap;">
-    <a href="https://play.google.com/store/apps/details?id=com.mahdi.mindflow" target="_blank" class="store-badge android-badge">
-      <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24c-1.43-.65-3.04-1.01-4.74-1.01-1.7 0-3.31.36-4.74 1.01L5.11 5.67c-.18-.28-.54-.37-.83-.22-.3.16-.42.54-.26.85L5.86 9.48C3.16 11.15 1.31 14.18 1 17.66h22c-.31-3.48-2.16-6.51-4.86-8.18zM7.5 15.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-      <div class="store-text">
-        <span class="store-small">DOWNLOAD ON</span>
-        <span class="store-big">Google Play</span>
-      </div>
-    </a>
-    <a href="#" onclick="alert('iOS Version coming soon! / به‌زودی برای آیفون');return false;" class="store-badge ios-badge">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.5 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.82M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-      <div class="store-text">
-        <span class="store-small">COMING SOON</span>
-        <span class="store-big">App Store</span>
-      </div>
-    </a>
-  </div>
-  <style>
-    .store-badge{display:flex;align-items:center;gap:10px;background:#0A0A1A;color:#fff;padding:10px 20px;border-radius:12px;text-decoration:none;border:1px solid #2D2D4E;transition:all .25s ease;position:relative;overflow:hidden;}
-    .store-badge::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);transition:left .5s;}
-    .store-badge:hover::before{left:100%;}
-    .store-badge:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(27,79,216,0.35);border-color:#1B4FD8;}
-    .store-badge svg{flex-shrink:0;}
-    .store-text{display:flex;flex-direction:column;line-height:1.2;text-align:left;}
-    .store-small{font-size:9px;opacity:0.7;letter-spacing:1px;}
-    .store-big{font-size:15px;font-weight:700;}
-    .ios-badge{opacity:0.6;cursor:not-allowed;}
-    .ios-badge:hover{transform:none;box-shadow:none;border-color:#2D2D4E;}
-    .ios-badge:hover::before{left:-100%;}
-    @media (prefers-reduced-motion: reduce){.store-badge{transition:none;}.store-badge::before{display:none;}}
-  </style>
-  <div class="ft-copy">© 2025 FahrReady.ch 🇨🇭 · <span id="ftcopy">Alle Rechte vorbehalten</span></div>
 </footer>
 
 <!-- MODAL -->
@@ -908,13 +1109,31 @@ const QUESTIONS=[
 
 // ── TRANSLATIONS ──────────────────────────────────────────
 const TX={
-  de:{nb1:'Anmelden',nb2:'Registrieren',hbadge:'Offizielle Schweizer Theorieprüfung',htitle:'Bestehe deine<br><span class="blue">Fahrprüfung</span>',herofa:'Bereite dich auf die Schweizer Theorieprüfung vor',herosub:'Persisch · Aserbaidschanisch · Deutsch · Englisch',hbtn1:'▶ Prüfung starten',hbtn2:'✦ Kostenlos registrieren',st1:'Fragen',st2:'Minuten',st3:'Punkte zum Bestehen',st4:'Sprachen',nl1:'Prüfung',nl2:'Vorbereitung',nl3:'Nachrichten',nl4:'Registrieren',ptag:'LERNMODUS',ptitle:'Vorbereitung & Übung',psub:'50 kostenlose Fragen — 400 Premium',pp1t:'Kostenlose Übung',pp1f:'Ohne Anmeldung',pp1s:'Fragen kostenlos',pp1b:'✓ GRATIS',pp2t:'Premium Übung',pp2f:'Komplette Datenbank',pp2s:'Fragen + KI',pp2b:'⭐ PREMIUM',pp3t:'Prüfungssimulation',pp3f:'Wie echte Prüfung',pp3s:'5 kostenlos dann Premium',pp3b:'▶ STARTEN',ftag:'WARUM FAHRREADY',ftitle:'Alles was du brauchst',fsub:'Kompletteste Vorbereitung für Migranten',f1t:'Echtes Format',f1f:'50 Fragen, 45 Min',f1d:'Genau wie die offizielle Prüfung.',f2t:'4 Sprachen',f2f:'DE/FA/AZ/EN',f2d:'Fragen Deutsch, Erklärungen in Ihrer Sprache.',f3t:'Echte Verkehrszeichen',f3f:'Fotos von echten Schildern',f3d:'Fragen mit echten Verkehrszeichen-Fotos.',f4t:'KI-Analyse',f4f:'KI erkennt Schwächen',f4d:'Personalisierte Empfehlungen nach jedem Test.',f5t:'Sicheres Login',f5f:'Einzigartiges Konto',f5d:'Kein Teilen möglich.',f6t:'App bald',f6f:'Android & iOS',f6d:'Demnächst verfügbar.',rtag:'PRÜFUNGSREGELN',rtitle:'Offizielle Prüfungsregeln',rsub:'قوانین رسمی آزمون تئوری سوئیس',ru1:'Fragen',rt1:'Gesamtfragen',rf1:'تعداد کل سوالات',ru2:'Minuten',rt2:'Prüfungszeit',rf2:'مدت آزمون',ru3:'von 150 Pkt',rt3:'Bestehenspunkte',rf3:'امتیاز قبولی',ru4:'max. Fehler',rt4:'Fehlerpunkte',rf4:'حداکثر خطا',ntag:'NEUIGKEITEN',ntitle:'Aktuelle Nachrichten',nsub:'اطلاعات هفتگی آزمون سوئیس',nn1:'⚡ NEU',nn2:'ASA 2025: Neue Fragen im Katalog',nn3:'کاتالوگ جدید ASA 2025',nc1:'Kreisverkehr: Neue Vorrangregel',nc1f:'قانون اولویت میدان',nc2:'E-Fahrzeuge: Neue Zeichen',nc2f:'علائم خودروهای برقی',nc3:'30 km/h Zone Genf',nc3f:'گسترش منطقه ژنو',nc4:'Via Sicura: Strengere Strafen',nc4f:'جریمه‌های سنگین‌تر',mtag:'ERFOLGE',mtitle:'Bestandene Mitglieder',msub:'امروز ۳۴ عضو قبول شدند',pl1:'Heute bestanden',pf1:'نفر امروز قبول شدند',pl2:'Aktive Nutzer',pf2:'کاربر فعال',pl3:'Abgesch. Prüfungen',pf3:'آزمون تکمیل‌شده',rgtag:'KOSTENLOS',rgtitle:'Jetzt registrieren',rgsub:'رایگان شروع کنید — بدون کارت اعتباری',rgl1:'Vor- und Nachname',rgl1f:'اسم کامل خود را وارد کنید',rgl2:'Passwort',rgbtn:'✦ Kostenlos starten',etag:'PRÜFUNGSSIMULATOR',etitle:'Theorieprüfung simulieren',esub:'۵ سوال رایگان — بعد نیاز به اشتراک',sTitle:'Schweizer Theorieprüfung',sFa:'Offizielles Format — genau wie die echte Prüfung',rr1:'50 Fragen / 45 Minuten',rr2:'3 Punkte pro Antwort — max. 150',rr3:'Bestehen: mindestens 135 Punkte',rr4:'Max. 15 Fehlerpunkte erlaubt',rr5:'⚠️ Nur 5 Fragen kostenlos — dann Premium',sBtnTxt:'Prüfung starten',exHeaderFa:'Schweizer Theorieprüfung',timerLbl:'Verbleibende Zeit',ptsLbl:'Pkt',nextLbl:'Weiter',pwTitle:'Premium erforderlich',pwFa:'5 kostenlose Fragen genutzt — Upgrade nötig',pln1:'Monatlich',plf1:'Monatsabo',plp1:'/Monat',plft1:'✓ 400 Fragen<br>✓ Unbegrenzte Prüfungen<br>✓ KI-Analyse',pln2:'Jährlich',plf2:'50% Rabatt',plp2:'/Jahr',plft2:'✓ Alles + KI-Plan<br>✓ Offline-Zugang<br>✓ PDF Downloads',ibanTitle:'💳 Zahlung per IBAN / Wise',ibanNote:'Bitte Referenzcode in der Zahlungsbeschreibung angeben',refLbl:'Referenz / كد مرجع:',confBtn:'✓ Zahlung bestätigen',backBtn:'← Zurück',resPtsL:'Pkte/150',resCorL:'Richtig',resErrL:'Fehler',retryBtn:'Erneut versuchen',upgradeBtn:'Upgrade — 400 Fragen',ftfa:'Die beste Theorieprüfungs-Plattform für Migranten in der Schweiz',ftcopy:'Alle Rechte vorbehalten',fla:'Startseite',flb:'Prüfung',flc:'Nachrichten',fld:'Registrieren',fle:'Datenschutz',flf:'Kontakt',adtop:'📢 Ihre Werbung hier — Fahrschulen willkommen! | info@fahrready.ch',admid:'🏫 Fahrschule — Spezialangebot für Migranten!',adnews:'🚗 Autoversicherung — beste Preise!',adexam:'📚 Fahrschule — Theoriekurs auf Persisch & Azerbaijani',adfoot:'🏢 Werbung hier — info@fahrready.ch',PASS:'BESTANDEN! 🎉',FAIL:'NICHT BESTANDEN',PASSMSG:'Wenn das die echte Prüfung wäre — Sie hätten bestanden!',FAILMSG:'Nicht entmutigen — nach 2 Wochen erneut antreten.',logout:'Abgemeldet',welcome:'Willkommen',fillAll:'Bitte alle Felder ausfüllen',passShort:'Passwort min. 6 Zeichen',emailExists:'E-Mail bereits registriert',regFail:'Fehler — SQL-Tabellen in Supabase Panel erstellen!',loginFail:'E-Mail oder Passwort falsch',payOk:'✅ Eingereicht — wird nach Bankbestätigung aktiviert',enterEmail:'Bitte E-Mail eingeben',qof:'von'},
+  de:{nb1:'Anmelden',nb2:'Registrieren',hbadge:'Offizielle Schweizer Theorieprüfung',htitle:'Bestehe deine<br><span class="blue">Fahrprüfung</span>',herofa:'Bereite dich auf die Schweizer Theorieprüfung vor',herosub:'Persisch · Aserbaidschanisch · Deutsch · Englisch',hbtn1:'▶ Prüfung starten',hbtn2:'✦ Kostenlos registrieren',st1:'Fragen',st2:'Minuten',st3:'Punkte zum Bestehen',st4:'Sprachen',nl1:'Prüfung',nl2:'Vorbereitung',nl3:'Nachrichten',nl4:'Registrieren',ptag:'LERNMODUS',ptitle:'Vorbereitung & Übung',psub:'50 kostenlose Fragen — 400 Premium',pp1t:'Kostenlose Übung',pp1f:'Ohne Anmeldung',pp1s:'Fragen kostenlos',pp1b:'✓ GRATIS',pp2t:'Premium Übung',pp2f:'Komplette Datenbank',pp2s:'Fragen + KI',pp2b:'⭐ PREMIUM',pp3t:'Prüfungssimulation',pp3f:'Wie echte Prüfung',pp3s:'5 kostenlos dann Premium',pp3b:'▶ STARTEN',ftag:'WARUM FAHRREADY',ftitle:'Alles was du brauchst',fsub:'Kompletteste Vorbereitung für Migranten',f1t:'Echtes Format',f1f:'50 Fragen, 45 Min',f1d:'Genau wie die offizielle Prüfung.',f2t:'4 Sprachen',f2f:'DE/FA/AZ/EN',f2d:'Fragen Deutsch, Erklärungen in Ihrer Sprache.',f3t:'Echte Verkehrszeichen',f3f:'Fotos von echten Schildern',f3d:'Fragen mit echten Verkehrszeichen-Fotos.',f4t:'KI-Analyse',f4f:'KI erkennt Schwächen',f4d:'Personalisierte Empfehlungen nach jedem Test.',f5t:'Sicheres Login',f5f:'Einzigartiges Konto',f5d:'Kein Teilen möglich.',f6t:'App bald',f6f:'Android & iOS',f6d:'Demnächst verfügbar.',rtag:'PRÜFUNGSREGELN',rtitle:'Offizielle Prüfungsregeln',rsub:'قوانین رسمی آزمون تئوری سوئیس',ru1:'Fragen',rt1:'Gesamtfragen',rf1:'تعداد کل سوالات',ru2:'Minuten',rt2:'Prüfungszeit',rf2:'مدت آزمون',ru3:'von 150 Pkt',rt3:'Bestehenspunkte',rf3:'امتیاز قبولی',ru4:'max. Fehler',rt4:'Fehlerpunkte',rf4:'حداکثر خطا',ntag:'NEUIGKEITEN',ntitle:'Aktuelle Nachrichten',nsub:'اطلاعات هفتگی آزمون سوئیس',nn1:'⚡ NEU',nn2:'ASA 2025: Neue Fragen im Katalog',nn3:'کاتالوگ جدید ASA 2025',nc1:'Kreisverkehr: Neue Vorrangregel',nc1f:'قانون اولویت میدان',nc2:'E-Fahrzeuge: Neue Zeichen',nc2f:'علائم خودروهای برقی',nc3:'30 km/h Zone Genf',nc3f:'گسترش منطقه ژنو',nc4:'Via Sicura: Strengere Strafen',nc4f:'جریمه‌های سنگین‌تر',mtag:'ERFOLGE',mtitle:'Bestandene Mitglieder',msub:'امروز ۳۴ عضو قبول شدند',pl1:'Heute bestanden',pf1:'نفر امروز قبول شدند',pl2:'Aktive Nutzer',pf2:'کاربر فعال',pl3:'Abgesch. Prüfungen',pf3:'آزمون تکمیل‌شده',rgtag:'KOSTENLOS',rgtitle:'Jetzt registrieren',rgsub:'رایگان شروع کنید — بدون کارت اعتباری',rgl1:'Vor- und Nachname',rgl1f:'اسم کامل خود را وارد کنید',rgl2:'Passwort',rgbtn:'✦ Kostenlos starten',etag:'PRÜFUNGSSIMULATOR',etitle:'Theorieprüfung simulieren',esub:'Nur 5 kostenlose Fragen — danach Premium',sTitle:'Schweizer Theorieprüfung',sFa:'Offizielles Format — genau wie die echte Prüfung',rr1:'50 Fragen / 45 Minuten',rr2:'3 Punkte pro Antwort — max. 150',rr3:'Bestehen: mindestens 135 Punkte',rr4:'Max. 15 Fehlerpunkte erlaubt',rr5:'⚠️ Nur 5 Fragen kostenlos — dann Premium',sBtnTxt:'Prüfung starten',exHeaderFa:'Schweizer Theorieprüfung',timerLbl:'Verbleibende Zeit',ptsLbl:'Pkt',nextLbl:'Weiter',pwTitle:'Premium erforderlich',pwFa:'5 kostenlose Fragen genutzt — Upgrade nötig',pln1:'Monatlich',plf1:'Monatsabo',plp1:'/Monat',plft1:'✓ 400 Fragen<br>✓ Unbegrenzte Prüfungen<br>✓ KI-Analyse',pln2:'Jährlich',plf2:'50% Rabatt',plp2:'/Jahr',plft2:'✓ Alles + KI-Plan<br>✓ Offline-Zugang<br>✓ PDF Downloads',ibanTitle:'💳 Zahlung per IBAN / Wise',ibanNote:'Bitte Referenzcode in der Zahlungsbeschreibung angeben',refLbl:'Referenz / كد مرجع:',confBtn:'✓ Zahlung bestätigen',backBtn:'← Zurück',resPtsL:'Pkte/150',resCorL:'Richtig',resErrL:'Fehler',retryBtn:'Erneut versuchen',upgradeBtn:'Upgrade — 400 Fragen',ftfa:'Die beste Theorieprüfungs-Plattform für Migranten in der Schweiz',ftcopy:'Alle Rechte vorbehalten',fla:'Startseite',flb:'Prüfung',flc:'Nachrichten',fld:'Registrieren',fle:'Datenschutz',flf:'Kontakt',adtop:'📢 Ihre Werbung hier — Fahrschulen willkommen! | info@fahrready.ch',admid:'🏫 Fahrschule — Spezialangebot für Migranten!',adnews:'🚗 Autoversicherung — beste Preise!',adexam:'📚 Fahrschule — Theoriekurs auf Persisch & Azerbaijani',adfoot:'🏢 Werbung hier — info@fahrready.ch',PASS:'BESTANDEN! 🎉',FAIL:'NICHT BESTANDEN',PASSMSG:'Wenn das die echte Prüfung wäre — Sie hätten bestanden!',FAILMSG:'Nicht entmutigen — nach 2 Wochen erneut antreten.',logout:'Abgemeldet',welcome:'Willkommen',fillAll:'Bitte alle Felder ausfüllen',passShort:'Passwort min. 6 Zeichen',emailExists:'E-Mail bereits registriert',regFail:'Fehler — SQL-Tabellen in Supabase Panel erstellen!',loginFail:'E-Mail oder Passwort falsch',payOk:'✅ Eingereicht — wird nach Bankbestätigung aktiviert',enterEmail:'Bitte E-Mail eingeben',qof:'von'},
   fa:{nb1:'ورود',nb2:'ثبت نام',hbadge:'آزمون تئوری رسمی سوئیس',htitle:'آزمون رانندگی<br><span class="blue">سوئیس</span> را قبول شو',herofa:'با اطمینان کامل آزمون تئوری سوئیس را قبول کنید',herosub:'فارسی · آذربایجانی · آلمانی · انگلیسی',hbtn1:'▶ شروع آزمون',hbtn2:'✦ ثبت نام رایگان',st1:'سوال',st2:'دقیقه',st3:'امتیاز قبولی',st4:'زبان',nl1:'آزمون',nl2:'آمادگی',nl3:'اخبار',nl4:'ثبت نام',ptag:'حالت یادگیری',ptitle:'آمادگی و تمرین',psub:'۵۰ سوال تمرینی رایگان — ۴۰۰ سوال با اشتراک',pp1t:'تمرین رایگان',pp1f:'بدون ثبت‌نام',pp1s:'سوال رایگان',pp1b:'✓ رایگان',pp2t:'تمرین ویژه',pp2f:'بانک کامل سوالات',pp2s:'سوال + AI',pp2b:'⭐ ویژه',pp3t:'شبیه‌ساز آزمون',pp3f:'دقیقاً مثل آزمون واقعی',pp3s:'۵ سوال رایگان',pp3b:'▶ شروع',ftag:'چرا فارردی',ftitle:'همه چیزی که نیاز دارید',fsub:'کامل‌ترین آمادگی برای مهاجران در سوئیس',f1t:'فرمت واقعی آزمون',f1f:'۵۰ سوال، ۴۵ دقیقه',f1d:'دقیقاً مثل آزمون رسمی سوئیس.',f2t:'۴ زبان',f2f:'FA/AZ/DE/EN',f2d:'سوالات آلمانی با توضیح فارسی.',f3t:'تصاویر علائم ترافیکی',f3f:'عکس‌های واقعی علائم',f3d:'سوالات با تصاویر واقعی علائم ترافیکی.',f4t:'تحلیل هوش مصنوعی',f4f:'AI نقاط ضعف را پیدا می‌کند',f4d:'توصیه‌های شخصی بعد از هر آزمون.',f5t:'ورود امن',f5f:'حساب منحصر به فرد',f5d:'هر حساب یکتا و امن — به اشتراک گذاشتن ممنوع.',f6t:'اپ به زودی',f6f:'Android و iOS',f6d:'اپ به زودی منتشر می‌شود.',rtag:'قوانین آزمون',rtitle:'قوانین رسمی آزمون تئوری سوئیس',rsub:'آزمون تئوری سوئیس این‌گونه کار می‌کند',ru1:'سوال',rt1:'کل سوالات',rf1:'تعداد کل سوالات',ru2:'دقیقه',rt2:'مدت آزمون',rf2:'زمان کل آزمون',ru3:'از ۱۵۰ امتیاز',rt3:'امتیاز قبولی',rf3:'حداقل امتیاز برای قبولی',ru4:'حداکثر خطا',rt4:'خطاهای مجاز',rf4:'حداکثر خطای مجاز',ntag:'اخبار',ntitle:'آخرین اخبار',nsub:'اطلاعات هفتگی درباره آزمون تئوری سوئیس',nn1:'⚡ جدید',nn2:'ASA 2025: سوالات جدید در کاتالوگ',nn3:'کاتالوگ جدید سوالات ASA برای سال ۲۰۲۵',nc1:'میدان: قانون اولویت جدید',nc1f:'قانون اولویت در میدان‌های ترافیکی به‌روز شد',nc2:'خودروی برقی: علائم جدید',nc2f:'علائم ترافیکی جدید برای خودروهای برقی',nc3:'منطقه ۳۰ کمپ ژنو گسترش یافت',nc3f:'گسترش محدوده ۳۰ کیلومتر در ژنو',nc4:'Via Sicura: جریمه‌های سنگین‌تر',nc4f:'جریمه‌های سنگین‌تر برای تخلفات رانندگی',mtag:'موفقیت‌ها',mtitle:'اعضای موفق',msub:'امروز ۳۴ عضو آزمون را گذراندند',pl1:'امروز قبول شدند',pf1:'نفر امروز آزمون را گذراندند',pl2:'کاربران فعال',pf2:'کاربر فعال این هفته',pl3:'آزمون‌های تکمیل شده',pf3:'آزمون تاکنون انجام شده',rgtag:'رایگان',rgtitle:'همین الان ثبت نام کنید',rgsub:'رایگان شروع کنید — بدون کارت اعتباری',rgl1:'نام و نام خانوادگی',rgl1f:'اسم کامل خود را وارد کنید',rgl2:'رمز عبور',rgbtn:'✦ شروع رایگان',etag:'شبیه‌ساز آزمون',etitle:'شبیه‌ساز آزمون تئوری سوئیس',esub:'۵ سوال رایگان — بعد نیاز به اشتراک ویژه',sTitle:'آزمون تئوری رانندگی سوئیس',sFa:'فرمت رسمی آزمون سوئیس — دقیقاً مثل آزمون واقعی',rr1:'۵۰ سوال / ۴۵ دقیقه',rr2:'۳ امتیاز برای هر جواب صحیح — حداکثر ۱۵۰',rr3:'قبولی: حداقل ۱۳۵ امتیاز (۹۰٪)',rr4:'حداکثر ۱۵ خطا مجاز است',rr5:'⚠️ فقط ۵ سوال رایگان — بعد نیاز به اشتراک',sBtnTxt:'شروع آزمون',exHeaderFa:'آزمون تئوری رسمی سوئیس',timerLbl:'زمان باقی‌مانده',ptsLbl:'امتیاز',nextLbl:'بعدی',pwTitle:'نیاز به اشتراک ویژه',pwFa:'۵ سوال رایگان شما تمام شد — برای ادامه اشتراک بخرید',pln1:'ماهانه',plf1:'اشتراک یک ماهه',plp1:'/ماه',plft1:'✓ ۴۰۰ سوال تمرینی<br>✓ آزمون نامحدود<br>✓ تحلیل هوش مصنوعی',pln2:'سالانه',plf2:'اشتراک سالانه — ۵۰٪ تخفیف',plp2:'/سال',plft2:'✓ همه موارد + برنامه AI<br>✓ دسترسی آفلاین<br>✓ دانلود PDF',ibanTitle:'💳 پرداخت از طریق IBAN / Wise',ibanNote:'لطفاً کد مرجع را در توضیحات پرداخت حتماً ذکر کنید',refLbl:'کد مرجع پرداخت:',confBtn:'✓ تأیید پرداخت',backBtn:'← بازگشت',resPtsL:'امتیاز / ۱۵۰',resCorL:'صحیح',resErrL:'خطا',retryBtn:'دوباره امتحان کن',upgradeBtn:'اشتراک ویژه — ۴۰۰ سوال',ftfa:'بهترین پلتفرم آمادگی برای آزمون رانندگی سوئیس برای فارسی‌زبانان',ftcopy:'تمام حقوق محفوظ است',fla:'خانه',flb:'آزمون',flc:'اخبار',fld:'ثبت نام',fle:'حریم خصوصی',flf:'تماس',adtop:'📢 اینجا جای تبلیغ شماست — مدارس رانندگی خوشامدید | info@fahrready.ch',admid:'🏫 مدرسه رانندگی — تخفیف ویژه مهاجران',adnews:'🚗 بیمه خودرو — بهترین قیمت برای رانندگان تازه‌کار',adexam:'📚 مدرسه رانندگی لوزرن — دوره تئوری به فارسی',adfoot:'🏢 تبلیغات شما اینجا — info@fahrready.ch',PASS:'قبول شدید! 🎉',FAIL:'مردود شدید',PASSMSG:'اگر این آزمون واقعی بود، شما قبول می‌شدید! 🇨🇭',FAILMSG:'نگران نباشید — می‌توانید بعد از ۲ هفته دوباره امتحان دهید.',logout:'خروج از حساب',welcome:'خوش آمدید',fillAll:'همه موارد را پر کنید',passShort:'رمز عبور حداقل ۶ کاراکتر',emailExists:'این ایمیل قبلاً ثبت شده است',regFail:'خطا — جداول SQL را در پنل Supabase بسازید!',loginFail:'ایمیل یا رمز عبور اشتباه است',payOk:'✅ درخواست ثبت شد — بعد از تأیید بانکی حساب فعال می‌شود',enterEmail:'ایمیل خود را وارد کنید',qof:'از'},
   az:{nb1:'Giriş',nb2:'Qeydiyyat',hbadge:'Rəsmi İsveçrə Nəzəriyyə İmtahanı',htitle:'İsveçrə Sürücülük<br><span class="blue">İmtahanı</span>nı keç',herofa:'İsveçrə nəzəriyyə imtahanına azərbaycan dilində hazırlaşın',herosub:'Azərbaycan · Farsca · Alman · İngilis',hbtn1:'▶ İmtahana başla',hbtn2:'✦ Pulsuz qeydiyyat',st1:'Sual',st2:'Dəqiqə',st3:'Keçid balı',st4:'Dil',nl1:'İmtahan',nl2:'Hazırlıq',nl3:'Xəbərlər',nl4:'Qeydiyyat',ptag:'ÖYRƏNMƏ',ptitle:'Hazırlıq və Məşq',psub:'50 pulsuz sual — 400 sual Premium ilə',pp1t:'Pulsuz Məşq',pp1f:'Qeydiyyatsız başla',pp1s:'sual pulsuz',pp1b:'✓ PULSUZ',pp2t:'Premium Məşq',pp2f:'Tam sual bankı',pp2s:'sual + AI',pp2b:'⭐ PREMİUM',pp3t:'Simulyator',pp3f:'Həqiqi imtahan kimi',pp3s:'5 pulsuz sonra Premium',pp3b:'▶ BAŞLA',ftag:'NİYƏ FAHRREADY',ftitle:'Sizə lazım olan hər şey',fsub:'İsveçrədəki miqrantlar üçün ən tam hazırlıq',f1t:'Həqiqi Format',f1f:'50 sual, 45 dəq',f1d:'Rəsmi imtahan kimi.',f2t:'4 Dil',f2f:'AZ/FA/DE/EN',f2d:'Alman dilində suallar, öz dilinizdə izahlar.',f3t:'Yol Nişanı Şəkilləri',f3f:'Həqiqi nişan şəkilləri',f3d:'Həqiqi nişan şəkilləri ilə suallar.',f4t:'AI Analizi',f4f:'AI zəif nöqtələri tapır',f4d:'Hər testdən sonra fərdi tövsiyələr.',f5t:'Təhlükəsiz Giriş',f5f:'Unikal hesab',f5d:'Paylaşmaq mümkün deyil.',f6t:'Tətbiq tezliklə',f6f:'Android & iOS',f6d:'Tezliklə.',rtag:'İMTAHAN QAYDALARI',rtitle:'Rəsmi İmtahan Qaydaları',rsub:'İsveçrə Nəzəriyyə İmtahanı belə işləyir',ru1:'Sual',rt1:'Ümumi Suallar',rf1:'Sual sayı',ru2:'Dəqiqə',rt2:'Müddət',rf2:'Ümumi vaxt',ru3:'150-dən bal',rt3:'Keçid balı',rf3:'Minimum bal',ru4:'max xəta',rt4:'Xəta balı',rf4:'Maks. icazəli xəta',ntag:'XƏBƏRLƏR',ntitle:'Son Xəbərlər',nsub:'Həftəlik yenilənən İsveçrə imtahan məlumatları',nn1:'⚡ YENİ',nn2:'ASA 2025: Kataloqda yeni suallar',nn3:'ASA 2025 sual kataloqu yayımlandı',nc1:'Dairəvi: Yeni üstünlük qaydası',nc1f:'Dairəvi hərəkət qaydası yeniləndi',nc2:'Elektrik avtomobili: Yeni nişanlar',nc2f:'EV üçün yeni yol nişanları',nc3:'30 km/saat zona — Cenevrə',nc3f:'Cenevrədə zonanın genişləndirilməsi',nc4:'Via Sicura: Sərtləşdirilmiş cəzalar',nc4f:'2025-ci ildə daha ağır cəzalar',mtag:'UĞURLAR',mtitle:'Müvəffəq Üzvlər',msub:'Bu gün 34 üzv imtahanı keçdi',pl1:'Bu gün keçdi',pf1:'nəfər bu gün keçdi',pl2:'Aktiv İstifadəçilər',pf2:'bu həftə aktiv',pl3:'Tamamlanmış İmtahanlar',pf3:'ümumiyyətlə tamamlandı',rgtag:'PULSUZ',rgtitle:'İndi qeydiyyatdan keçin',rgsub:'Pulsuz başlayın — kredit kartı lazım deyil',rgl1:'Ad və Soyad',rgl1f:'Tam adınızı daxil edin',rgl2:'Şifrə',rgbtn:'✦ Pulsuz başla',etag:'SİMULYATOR',etitle:'Nəzəriyyə İmtahanı Simulyatoru',esub:'5 sual pulsuz — sonra Premium',sTitle:'İsveçrə Nəzəriyyə İmtahanı',sFa:'Rəsmi format — həqiqi imtahan kimi',rr1:'50 sual / 45 dəqiqə',rr2:'Hər düzgün cavab 3 bal — maks. 150',rr3:'Keçmək: ən azı 135 bal (90%)',rr4:'Maks. 15 xəta balına icazə verilir',rr5:'⚠️ Yalnız 5 sual pulsuz — sonra Premium',sBtnTxt:'İmtahana başla',exHeaderFa:'İsveçrə Nəzəriyyə İmtahanı',timerLbl:'Qalan vaxt',ptsLbl:'Bal',nextLbl:'Növbəti',pwTitle:'Premium tələb olunur',pwFa:'5 pulsuz sualınız bitdi — davam etmək üçün yüksəldin',pln1:'Aylıq',plf1:'Aylıq abunə',plp1:'/ay',plft1:'✓ 400 məşq sualı<br>✓ Limitsiz imtahan<br>✓ AI analizi',pln2:'İllik',plf2:'İllik abunə — 50% endirim',plp2:'/il',plft2:'✓ Hər şey + AI plan<br>✓ Offline giriş<br>✓ PDF yükləmələr',ibanTitle:'💳 IBAN / Wise ilə ödəniş',ibanNote:'İzahatda istinad kodunu mütləq yazın',refLbl:'İstinad kodu:',confBtn:'✓ Ödənişi təsdiq et',backBtn:'← Geri',resPtsL:'Bal/150',resCorL:'Düzgün',resErrL:'Xəta',retryBtn:'Yenidən cəhd et',upgradeBtn:'Premium — 400 sual',ftfa:'İsveçrədəki azərbaycanlılar üçün ən yaxşı nəzəriyyə imtahanı platformu',ftcopy:'Bütün hüquqlar qorunur',fla:'Ana Səhifə',flb:'İmtahan',flc:'Xəbərlər',fld:'Qeydiyyat',fle:'Məxfilik',flf:'Əlaqə',adtop:'📢 Reklam yeriniz — info@fahrready.ch',admid:'🏫 Sürücülük məktəbi — Xüsusi təklif',adnews:'🚗 Avtomobil sığortası — ən yaxşı qiymətlər',adexam:'📚 Nəzəriyyə kursu — Azərbaycan dilində',adfoot:'🏢 Reklam yeriniz — info@fahrready.ch',PASS:'KEÇDİNİZ! 🎉',FAIL:'KEÇMƏDİNİZ',PASSMSG:'Bu həqiqi imtahan olsaydı — keçərdiniz! 🇨🇭',FAILMSG:'Narahat olmayın — 2 həftə sonra yenidən cəhd edə bilərsiniz.',logout:'Hesabdan çıxış',welcome:'Xoş gəldiniz',fillAll:'Bütün sahələri doldurun',passShort:'Şifrə min. 6 simvol',emailExists:'Bu e-poçt artıq qeydiyyatdan keçib',regFail:'Xəta — Supabase panelində SQL cədvəllərini yaradın!',loginFail:'E-poçt və ya şifrə yanlışdır',payOk:'✅ Göndərildi — bank təsdiqindən sonra aktiv olacaq',enterEmail:'E-poçtunuzu daxil edin',qof:'of'},
   en:{nb1:'Login',nb2:'Register',hbadge:'Official Swiss Theory Exam',htitle:'Pass your Swiss<br><span class="blue">Fahrprüfung</span>',herofa:'Prepare for the Swiss theory exam with full confidence',herosub:'Persian · Azerbaijani · German · English',hbtn1:'▶ Start Exam',hbtn2:'✦ Register Free',st1:'Questions',st2:'Minutes',st3:'Pass Score',st4:'Languages',nl1:'Exam',nl2:'Prep',nl3:'News',nl4:'Register',ptag:'STUDY MODE',ptitle:'Preparation & Practice',psub:'50 free questions — 400 Premium',pp1t:'Free Practice',pp1f:'No registration needed',pp1s:'questions free',pp1b:'✓ FREE',pp2t:'Premium Practice',pp2f:'Complete question bank',pp2s:'questions + AI',pp2b:'⭐ PREMIUM',pp3t:'Exam Simulator',pp3f:'Like the real exam',pp3s:'5 free then Premium',pp3b:'▶ START',ftag:'WHY FAHRREADY',ftitle:'Everything you need',fsub:'Most complete preparation for migrants in Switzerland',f1t:'Real Exam Format',f1f:'50 questions, 45 min',f1d:'Exactly like the official exam.',f2t:'4 Languages',f2f:'FA/AZ/DE/EN',f2d:'Questions in German, explanations in your language.',f3t:'Real Traffic Signs',f3f:'Photos of real signs',f3d:'Questions with real traffic sign photos.',f4t:'AI Analysis',f4f:'AI detects weaknesses',f4d:'Personalised recommendations after each test.',f5t:'Secure Login',f5f:'Unique account',f5d:'No sharing possible.',f6t:'App coming soon',f6f:'Android & iOS',f6d:'Coming soon.',rtag:'EXAM RULES',rtitle:'Official Exam Rules',rsub:'How the Swiss Theory Exam works',ru1:'Questions',rt1:'Total Questions',rf1:'Total exam questions',ru2:'Minutes',rt2:'Exam Duration',rf2:'Total exam time',ru3:'of 150 pts',rt3:'Pass Score',rf3:'Minimum score to pass',ru4:'max errors',rt4:'Error Points',rf4:'Maximum allowed errors',ntag:'NEWS',ntitle:'Latest News',nsub:'Weekly updated Swiss theory exam info',nn1:'⚡ NEW',nn2:'ASA 2025: New Questions in Catalog',nn3:'New ASA 2025 question catalog released',nc1:'Roundabout: New Priority Rule',nc1f:'Roundabout priority rule updated',nc2:'EV: New Traffic Signs',nc2f:'New signs for electric vehicles',nc3:'30 km/h Zone Geneva expanded',nc3f:'30 km/h zone expansion in Geneva',nc4:'Via Sicura: Stricter Penalties',nc4f:'Stricter fines for driving violations',mtag:'SUCCESSES',mtitle:'Members Who Passed',msub:'34 members passed today',pl1:'Passed today',pf1:'people passed today',pl2:'Active Users',pf2:'active users this week',pl3:'Completed Exams',pf3:'exams completed total',rgtag:'FREE',rgtitle:'Register Now',rgsub:'Start free — no credit card needed',rgl1:'Full Name',rgl1f:'Enter your full name',rgl2:'Password',rgbtn:'✦ Start Free',etag:'EXAM SIMULATOR',etitle:'Theory Exam Simulator',esub:'5 questions free — then Premium required',sTitle:'Swiss Theory Exam',sFa:'Official format — exactly like the real exam',rr1:'50 questions / 45 minutes',rr2:'3 points per correct answer — max 150',rr3:'Pass: minimum 135 points (90%)',rr4:'Max. 15 error points allowed',rr5:'⚠️ Only 5 questions free — then Premium',sBtnTxt:'Start Exam',exHeaderFa:'Swiss Theory Exam',timerLbl:'Time Remaining',ptsLbl:'Pts',nextLbl:'Next',pwTitle:'Premium Required',pwFa:'5 free questions used — upgrade for full access',pln1:'Monthly',plf1:'Monthly subscription',plp1:'/month',plft1:'✓ 400 practice questions<br>✓ Unlimited exams<br>✓ AI analysis',pln2:'Yearly',plf2:'Yearly — 50% off',plp2:'/year',plft2:'✓ All + AI study plan<br>✓ Offline access<br>✓ PDF downloads',ibanTitle:'💳 Payment via IBAN / Wise',ibanNote:'Include reference code in payment description',refLbl:'Reference code:',confBtn:'✓ Confirm Payment',backBtn:'← Back',resPtsL:'Points/150',resCorL:'Correct',resErrL:'Errors',retryBtn:'Try Again',upgradeBtn:'Upgrade — 400 Questions',ftfa:'Best theory exam platform for migrants in Switzerland',ftcopy:'All rights reserved',fla:'Home',flb:'Exam',flc:'News',fld:'Register',fle:'Privacy',flf:'Contact',adtop:'📢 Your ad here — Driving schools welcome! | info@fahrready.ch',admid:'🏫 Driving school — Special offer for migrants!',adnews:'🚗 Car insurance — best prices for new drivers!',adexam:'📚 Driving school — Theory course in Persian & Azerbaijani',adfoot:'🏢 Advertise here — info@fahrready.ch',PASS:'PASSED! 🎉',FAIL:'NOT PASSED',PASSMSG:'If this was the real exam today — you would PASS! 🇨🇭',FAILMSG:"Don't give up — you can retry after 2 weeks.",logout:'Logged out',welcome:'Welcome',fillAll:'Please fill all fields',passShort:'Password minimum 6 characters',emailExists:'This email is already registered',regFail:'Error — create SQL tables in Supabase panel!',loginFail:'Email or password incorrect',payOk:'✅ Submitted — account activated after bank confirmation',enterEmail:'Please enter your email',qof:'of'}
 };
 
 // ── LANGUAGE ──────────────────────────────────────────────
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur==='dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  document.getElementById('themeToggle').textContent = next==='dark' ? '☀️' : '🌙';
+  localStorage.setItem('fr_theme', next);
+}
+(function(){
+  const saved = localStorage.getItem('fr_theme');
+  if(saved==='dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    window.addEventListener('DOMContentLoaded',()=>{
+      const btn=document.getElementById('themeToggle');
+      if(btn)btn.textContent='☀️';
+    });
+  }
+})();
+
 function setL(l){
   LANG=l;
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('on',b.textContent===l.toUpperCase()));
@@ -926,10 +1145,18 @@ function setL(l){
   if(hfa){hfa.style.direction=isRTL?'rtl':'ltr';hfa.style.textAlign=isRTL?'right':'left';hfa.style.fontFamily=isRTL?"'Vazirmatn',sans-serif":'';}
   // FA class elementleri
   document.querySelectorAll('.sec-sub.fa,.screen-fa,.ex-title-fa,.feat-fa,.rule-fa,.news-fa,.news-card-fa,.proof-fa,.reg-label.fa,.modal-sub.fa,.res-fa,.plan-fa,.iban-title,.iban-note,.ft-fa').forEach(el=>{
-    el.style.direction=isRTL?'rtl':'ltr';
-    el.style.textAlign=isRTL?'right':'left';
-    if(isRTL)el.style.fontFamily="'Vazirmatn',sans-serif";
+    if(l==='fa'){
+      el.style.display='';
+      el.style.direction='rtl';
+      el.style.textAlign='right';
+      el.style.fontFamily="'Vazirmatn',sans-serif";
+    } else {
+      // Hide Farsi-only secondary subtitles for de/en/az
+      el.style.display='none';
+    }
   });
+  // herofa also hidden for non-fa
+  if(hfa){ hfa.style.display = (l==='fa') ? '' : 'none'; }
   updateNavUser();
 }
 
@@ -1243,8 +1470,14 @@ function guestLogin(){
   document.getElementById('nb2').style.display='none';
 }
 
+function normalizePhone(p){
+  p = p.trim().replace(/[\s\-()]/g,'');
+  if(!p.startsWith('+')) p = '+'+p;
+  return p;
+}
+
 async function sendSmsCode(){
-  const phone = document.getElementById('loginPhone').value.trim();
+  const phone = normalizePhone(document.getElementById('loginPhone').value);
   const T = {
     enterPhone: {de:'Telefonnummer eingeben',fa:'شماره تلفن را وارد کنید',az:'Telefon nömrəsi daxil edin',en:'Enter phone number'}[LANG],
     smsSent: {de:'SMS gesendet!',fa:'پیامک ارسال شد!',az:'SMS göndərildi!',en:'SMS sent!'}[LANG],
@@ -1255,7 +1488,7 @@ async function sendSmsCode(){
   try {
     const r = await fetch(SBURL+'/auth/v1/otp',{
       method:'POST',
-      headers:{'Content-Type':'application/json','apikey':SBKEY},
+      headers:{'Content-Type':'application/json','apikey':SBKEY,'Authorization':'Bearer '+SBKEY},
       body:JSON.stringify({phone,channel:'sms'})
     });
     if(r.ok){
@@ -1270,7 +1503,7 @@ async function sendSmsCode(){
 }
 
 async function verifyOtpWeb(){
-  const phone = document.getElementById('loginPhone').value.trim();
+  const phone = normalizePhone(document.getElementById('loginPhone').value);
   const token = document.getElementById('loginOtp').value.trim();
   const T = {
     enterCode: {de:'Code eingeben',fa:'کد را وارد کنید',az:'Kodu daxil edin',en:'Enter code'}[LANG],
@@ -1283,18 +1516,18 @@ async function verifyOtpWeb(){
   try {
     const r = await fetch(SBURL+'/auth/v1/verify',{
       method:'POST',
-      headers:{'Content-Type':'application/json','apikey':SBKEY},
+      headers:{'Content-Type':'application/json','apikey':SBKEY,'Authorization':'Bearer '+SBKEY},
       body:JSON.stringify({phone,token,type:'sms'})
     });
     const data = await r.json();
     if(r.ok && data.user){
       const ur = await sbReq('users?email=eq.'+encodeURIComponent(phone));
-      let user = Array.isArray(ur) && ur[0];
+      let user = (ur.ok && Array.isArray(ur.data) && ur.data[0]) || null;
       if(!user){
-        const cr = await sbReq('users','POST',{email:phone,full_name:T.user+' '+phone.slice(-4),language:LANG,is_premium:false,created_at:new Date().toISOString()});
-        user = Array.isArray(cr) && cr[0];
+        const cr = await sbReq('users','POST',{email:phone,password_hash:'phone_'+Date.now(),full_name:T.user+' '+phone.slice(-4),language:LANG,is_premium:false,created_at:new Date().toISOString()});
+        user = (cr.ok && Array.isArray(cr.data) && cr.data[0]) || null;
       }
-      if(user){USER=user;closeModal(true);afterLogin();toast(T.welcome+' '+user.full_name+'!','ok');}
+      if(user){saveUser(user);closeModal(true);toast(T.welcome+' '+user.full_name+'!','ok');setL(user.language||'de');}
     } else {
       toast(data.msg||T.wrongCode,'err');
     }
@@ -1382,16 +1615,16 @@ function confirmDeleteAccount(){
 
 // ── INIT ──────────────────────────────────────────────────
 loadUser();
-loadAppLink();
 
 async function loadAppLink(){
   try{
     const r = await sbReq('settings?key=eq.android_store_url');
-    if(Array.isArray(r)&&r[0]?.value){
+    const data = r?.data || r;
+    if(Array.isArray(data)&&data[0]?.value){
       const link = document.getElementById('androidStoreLink');
-      if(link) link.href = r[0].value;
+      if(link) link.href = data[0].value;
     }
-  }catch(e){}
+  }catch(e){console.log('loadAppLink error',e);}
 }
 setL('de');
 
@@ -1637,9 +1870,13 @@ async function stripeCheckout(){
   if(btn){ btn.textContent = '💳 Mit Kreditkarte bezahlen'; btn.disabled = false; }
 }
 
+
+window.addEventListener('load', function(){
+  setTimeout(loadAppLink, 500);
+});
 </script>
 <div style="text-align:center;padding:20px;border-top:1px solid #E5E7EB;margin-top:20px;">
-  <a href="/privacy.html" style="color:#6B7280;font-size:13px;text-decoration:none;">🔒 ${LANG==='fa'?'حریم خصوصی':LANG==='az'?'Məxfilik':LANG==='en'?'Privacy':'Datenschutz'} / حریم خصوصی / Gizlilik</a>
+  <a href="/privacy.html" style="color:#6B7280;font-size:13px;text-decoration:none;">🔒 Datenschutz / حریم خصوصی / Gizlilik</a>
   &nbsp;·&nbsp;
   <span style="color:#6B7280;font-size:13px;">© 2026 FahrReady</span>
 </div>

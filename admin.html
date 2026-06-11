@@ -1007,10 +1007,25 @@ function buildNewsModal(n, editId=null){
       <div><label class="mlabel">İkon (emoji)</label><input class="minp" id="nicon" value="${n?n.icon||'📰':'📰'}"></div>
       <div><label class="mlabel">Tag</label><input class="minp" id="ntag" value="${n?n.tag||'NEU':'NEU'}"></div>
     </div>
-    <label class="mlabel">Başlık — Almanca *</label><input class="minp" id="nde" value="${n?n.title_de||'':''}">
+    <div style="position:relative;">
+      <label class="mlabel">Başlık — Almanca *</label>
+      <input class="minp" id="nde" value="${n?n.title_de||'':''}">
+      <button class="trans-btn" onclick="autoTranslateNews()" title="4 dile çevir" style="position:absolute;right:8px;top:30px;background:none;border:none;font-size:18px;cursor:pointer;">🌐</button>
+    </div>
     <label class="mlabel">Başlık — Farsça</label><input class="minp" id="nfa" value="${n?n.title_fa||'':''}">
     <label class="mlabel">Başlık — Azerbaycanca</label><input class="minp" id="naz" value="${n?n.title_az||'':''}">
     <label class="mlabel">Başlık — İngilizce</label><input class="minp" id="nen" value="${n?n.title_en||'':''}">
+
+    <div class="msec">
+      <label class="mlabel">İçerik (Devamı) — Almanca</label>
+      <textarea class="mta" id="ncde" rows="4">${n?n.content_de||'':''}</textarea>
+      <label class="mlabel">İçerik — Farsça</label>
+      <textarea class="mta" id="ncfa" rows="4">${n?n.content_fa||'':''}</textarea>
+      <label class="mlabel">İçerik — Azerbaycanca</label>
+      <textarea class="mta" id="ncaz" rows="4">${n?n.content_az||'':''}</textarea>
+      <label class="mlabel">İçerik — İngilizce</label>
+      <textarea class="mta" id="ncen" rows="4">${n?n.content_en||'':''}</textarea>
+    </div>
     <div class="msec">
       <label class="mlabel">📷 Haber Fotoğrafı</label>
       ${n&&n.image_url?`<div style="margin-bottom:8px;"><img src="${n.image_url}" style="height:80px;border-radius:8px;object-fit:cover;border:1px solid var(--border);">  <span style="font-size:10px;color:var(--gr);">Mevcut fotoğraf</span></div>`:''}
@@ -1045,6 +1060,10 @@ async function saveNews(editId){
     title_fa:document.getElementById('nfa').value.trim(),
     title_az:document.getElementById('naz').value.trim(),
     title_en:document.getElementById('nen').value.trim(),
+    content_de:document.getElementById('ncde').value.trim(),
+    content_fa:document.getElementById('ncfa').value.trim(),
+    content_az:document.getElementById('ncaz').value.trim(),
+    content_en:document.getElementById('ncen').value.trim(),
     image_url:imgUrl,
     is_main:document.getElementById('nmain').checked,
     is_active:true
@@ -1315,6 +1334,15 @@ async function autoTranslate(sourceEl, faEl, azEl, enEl){
   
   sourceEl.disabled=false;
   if(btn) btn.textContent='🌐';
+}
+
+async function autoTranslateNews(){
+  const tde=document.getElementById('nde'), tfa=document.getElementById('nfa'), taz=document.getElementById('naz'), ten=document.getElementById('nen');
+  await autoTranslate(tde, tfa, taz, ten);
+  const cde=document.getElementById('ncde'), cfa=document.getElementById('ncfa'), caz=document.getElementById('ncaz'), cen=document.getElementById('ncen');
+  if(cde && cde.value.trim()){
+    await autoTranslate(cde, cfa, caz, cen);
+  }
 }
 
 async function autoTranslateQ(){
