@@ -41,12 +41,14 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:#111;overflow-x:hidd
   color:var(--txt)!important;
 }
 [data-theme="dark"] .ex-opt-letter{background:var(--grl)!important;color:var(--bl)!important;}
+[data-theme="dark"] .pltr{background:var(--grl)!important;color:var(--bl)!important;}
 [data-theme="dark"] .ex-opt.correct{background:var(--gnl)!important;border-color:var(--gn)!important;}
 [data-theme="dark"] .ex-opt.wrong{background:var(--rdl)!important;border-color:var(--rd)!important;}
 [data-theme="dark"] .ex-opt.selected{background:var(--bll)!important;border-color:var(--bl)!important;}
 [data-theme="dark"] .btn-secondary{background:var(--grl)!important;color:var(--txt)!important;border-color:var(--grb)!important;}
 [data-theme="dark"] .btn-retry{background:var(--grl)!important;color:var(--txt)!important;}
-[data-theme="dark"] .pbtn,[data-theme="dark"] .popt{background:var(--card)!important;color:var(--txt)!important;border-color:var(--grb)!important;}
+[data-theme="dark"] .popt{background:var(--card)!important;color:var(--txt)!important;border-color:var(--grb)!important;}
+[data-theme="dark"] .pbtn{background:var(--bl)!important;color:#fff!important;}
 [data-theme="dark"] .pbox-close{background:var(--grl)!important;color:var(--txt)!important;border-color:var(--grb)!important;}
 [data-theme="dark"] .blue-grad{background:linear-gradient(135deg,var(--bld) 0%,#0a1530 100%)!important;}
 [data-theme="dark"] .ex-score-n{color:var(--txt)!important;}
@@ -417,7 +419,8 @@ footer::before{
 .popt.no{background:#FEF2F2!important;border-color:#DC2626!important;}
 .pltr{width:28px;height:28px;border-radius:50%;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
 .pfb{border-radius:10px;padding:12px;margin:10px 0;text-align:center;font-size:14px;font-weight:800;display:none;}
-.pbtn{width:100%;padding:14px;background:#94A3B8;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px;}
+.pbtn{width:100%;padding:14px;background:var(--bl);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px;transition:opacity .2s;}
+.pbtn:hover{opacity:.9;}
 .pbtn.on{background:#1B4FD8;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -522,8 +525,8 @@ footer::before{
 
   <div id="pStart" style="text-align:center;padding:20px 0;">
     <div style="font-size:40px;margin-bottom:12px;">📖</div>
-    <div style="font-size:15px;font-weight:700;color:#0f172a;margin-bottom:6px;">Übung starten</div>
-    <div style="font-size:12px;color:#6B7280;margin-bottom:18px;">Fragen — 10er Blöcke — Random</div>
+    <div id="pStartTitle" style="font-size:15px;font-weight:700;color:var(--txt);margin-bottom:6px;">Übung starten</div>
+    <div id="pStartSub" style="font-size:12px;color:var(--gr);margin-bottom:18px;">Fragen — 10er Blöcke — Random</div>
     <button onclick="pBegin()" style="background:#1B4FD8;color:#fff;border:none;border-radius:12px;padding:13px 32px;font-size:15px;font-weight:800;cursor:pointer;">▶ Jetzt starten</button>
   </div>
 
@@ -1125,7 +1128,11 @@ function toggleTheme(){
 
 function setL(l){
   LANG=l;
+  const pst=document.getElementById('pStartTitle'), pss=document.getElementById('pStartSub');
+  if(pst) pst.textContent = {de:'Übung starten',fa:'شروع تمرین',az:'Məşqə başla',en:'Start practice'}[l]||'Übung starten';
+  if(pss) pss.textContent = {de:'Fragen — 10er Blöcke — Random',fa:'سوالات — بلوک‌های ۱۰تایی — تصادفی',az:'Suallar — 10-luq bloklar — Təsadüfi',en:'Questions — blocks of 10 — random'}[l]||'';
   if(typeof renderNewsGrid==='function') renderNewsGrid();
+  if(typeof pLoad==='function' && typeof PQ!=='undefined' && PQ && PQ.length && document.getElementById('pMain') && document.getElementById('pMain').style.display!=='none'){ pLoad(); }
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('on',b.textContent===l.toUpperCase()));
   const t=TX[l];
   const isRTL=(l==='fa'||l==='az');
