@@ -953,14 +953,14 @@ footer::before{
 
 <script>
 // ── CONFIG ──────────────────────────────────────────────
-const SBURL='https://npfvlfdjngzczxhghmyu.supabase.co';
-const SBKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZnZsZmRqbmd6Y3p4aGdobXl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMTI2NjgsImV4cCI6MjA5NDg4ODY2OH0.oqnB4FTnmj-wno7AEgTz-MAmunazqwpj5jEkvB5xN8s';
+const SBURL='https://gmiklywexcgvofyejyah.supabase.co';
+const SBKEY='sb_publishable_buc1peVZnUceUpNn8z3eSw_C356Gf12';
 // ⚠️ IBAN buraya eklenecek — önce Stripe/Wise onayı
 const IBAN_DISPLAY = 'Wird nach Ihrer Bestätigung bekannt gegeben / پس از تأیید اعلام می‌شود';
 
 // ── SUPABASE ─────────────────────────────────────────────
 async function sbReq(path,method,body){
-  const r=await fetch(SBURL+'/rest/v1/'+path,{method:method||'GET',headers:{'apikey':SBKEY,'Authorization':'Bearer '+SBKEY,'Content-Type':'application/json','Prefer':'return=representation'},body:body?JSON.stringify(body):undefined});
+  const r=await fetch(SBURL+'/rest/v1/'+path,{method:method||'GET',headers:{'apikey':SBKEY,...(SBKEY.startsWith('eyJ')?{'Authorization':'Bearer '+SBKEY}:{}),'Content-Type':'application/json','Prefer':'return=representation'},body:body?JSON.stringify(body):undefined});
   return{ok:r.ok,status:r.status,data:await r.json()};
 }
 async function hashPwd(p){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p+'fahrready2025'));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
@@ -1302,9 +1302,9 @@ function openAiAnalysis(){
   const wrongTopics = wrong.slice(0,6).map(r=>r.q?.de||r.q?.text_de||'').join('; ');
   const prompt = 'Analysiere diese Schweizer Fahrprüfung auf Deutsch und Persisch. Richtig: '+(examResults.filter(r=>r.correct).length)+'/'+examResults.length+'. Falsch: '+wrongTopics+'. Gib Lernempfehlungen. Max 150 Wörter pro Sprache.';
   
-  fetch('https://npfvlfdjngzczxhghmyu.supabase.co/functions/v1/ai-analysis',{
+  fetch('https://gmiklywexcgvofyejyah.supabase.co/functions/v1/ai-analysis',{
     method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZnZsZmRqbmd6Y3p4aGdobXl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMTI2NjgsImV4cCI6MjA5NDg4ODY2OH0.oqnB4FTnmj-wno7AEgTz-MAmunazqwpj5jEkvB5xN8s','apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZnZsZmRqbmd6Y3p4aGdobXl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMTI2NjgsImV4cCI6MjA5NDg4ODY2OH0.oqnB4FTnmj-wno7AEgTz-MAmunazqwpj5jEkvB5xN8s'},
+    headers:{'Content-Type':'application/json','Authorization':'Bearer sb_publishable_buc1peVZnUceUpNn8z3eSw_C356Gf12','apikey':'sb_publishable_buc1peVZnUceUpNn8z3eSw_C356Gf12'},
     body:JSON.stringify({prompt})
   }).then(r=>r.json()).then(d=>{
     document.getElementById('aiResult').innerHTML = '<p style="white-space:pre-wrap;">'+(d.text||d.error||'Fehler')+'</p>';
@@ -1488,7 +1488,7 @@ async function sendSmsCode(){
   try {
     const r = await fetch(SBURL+'/auth/v1/otp',{
       method:'POST',
-      headers:{'Content-Type':'application/json','apikey':SBKEY,'Authorization':'Bearer '+SBKEY},
+      headers:{'Content-Type':'application/json','apikey':SBKEY,...(SBKEY.startsWith('eyJ')?{'Authorization':'Bearer '+SBKEY}:{})},
       body:JSON.stringify({phone,channel:'sms'})
     });
     if(r.ok){
@@ -1516,7 +1516,7 @@ async function verifyOtpWeb(){
   try {
     const r = await fetch(SBURL+'/auth/v1/verify',{
       method:'POST',
-      headers:{'Content-Type':'application/json','apikey':SBKEY,'Authorization':'Bearer '+SBKEY},
+      headers:{'Content-Type':'application/json','apikey':SBKEY,...(SBKEY.startsWith('eyJ')?{'Authorization':'Bearer '+SBKEY}:{})},
       body:JSON.stringify({phone,token,type:'sms'})
     });
     const data = await r.json();
@@ -1712,10 +1712,16 @@ loadSbQ();
 // ── SUPABASE QUESTION LOADER ───────────────────────
 async function loadSbQ(){
   try{
-    const qr=await sbReq('questions?is_active=eq.true&order=id.asc&limit=500');
-    if(!qr.ok||!Array.isArray(qr.data)||qr.data.length===0)return;
-    const ar=await sbReq('answers?order=question_id.asc,id.asc&limit=2000');
-    if(!ar.ok||!Array.isArray(ar.data))return;
+    var qr=null,ar=null;
+    try{var c=JSON.parse(localStorage.getItem('fr_qcache_v1')||'null');
+      if(c&&Date.now()-c.t<43200000&&c.q&&c.a){qr={ok:true,data:c.q};ar={ok:true,data:c.a};}}catch(e){}
+    if(!qr){
+      qr=await sbReq('questions?is_active=eq.true&order=id.asc&limit=500');
+      if(!qr.ok||!Array.isArray(qr.data)||qr.data.length===0)return;
+      ar=await sbReq('answers?order=question_id.asc,id.asc&limit=2000');
+      if(!ar.ok||!Array.isArray(ar.data))return;
+      try{localStorage.setItem('fr_qcache_v1',JSON.stringify({t:Date.now(),q:qr.data,a:ar.data}));}catch(e){}
+    }
     const sbQ=qr.data.map(q=>({
       de:q.text_de||'', fa:q.text_fa||'', az:q.text_az||'', en:q.text_en||'',
       img:q.img_url||'', multi:q.is_multi||false,
@@ -1919,8 +1925,8 @@ function pBarDraw(){
 // ── STRIPE CHECKOUT ────────────────────────────────────
 const STRIPE_MONTHLY = 'price_1TgMzP0VonCoGUqlWZ6pYNOK';
 const STRIPE_YEARLY  = 'price_1TgMzy0VonCoGUqlOfHZ5xR5';
-const SB_CHECKOUT_URL = 'https://npfvlfdjngzczxhghmyu.supabase.co/functions/v1/create-checkout';
-const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZnZsZmRqbmd6Y3p4aGdobXl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMTI2NjgsImV4cCI6MjA5NDg4ODY2OH0.oqnB4FTnmj-wno7AEgTz-MAmunazqwpj5jEkvB5xN8s';
+const SB_CHECKOUT_URL = 'https://gmiklywexcgvofyejyah.supabase.co/functions/v1/create-checkout';
+const SB_ANON = 'sb_publishable_buc1peVZnUceUpNn8z3eSw_C356Gf12';
 
 async function stripeCheckout(){
   const email = ge('confEmail')?.value?.trim() || USER?.email || '';
@@ -1937,7 +1943,7 @@ async function stripeCheckout(){
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + SB_ANON,
+        ...(SB_ANON.startsWith('eyJ')?{'Authorization':'Bearer '+SB_ANON}:{}),
         'apikey': SB_ANON
       },
       body: JSON.stringify({ priceId, email })

@@ -526,8 +526,8 @@ ALTER TABLE news ADD COLUMN IF NOT EXISTS title_en TEXT DEFAULT '';</div>
 // ═══════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════
-const SB = 'https://npfvlfdjngzczxhghmyu.supabase.co';
-const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZnZsZmRqbmd6Y3p4aGdobXl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMTI2NjgsImV4cCI6MjA5NDg4ODY2OH0.oqnB4FTnmj-wno7AEgTz-MAmunazqwpj5jEkvB5xN8s';
+const SB = 'https://gmiklywexcgvofyejyah.supabase.co';
+const KEY = 'sb_publishable_buc1peVZnUceUpNn8z3eSw_C356Gf12';
 const STORE = SB + '/storage/v1/object/public/question-images/';
 
 function adm(){ return { e: localStorage.getItem('fr_ae')||'admin@fahrready.ch', p: localStorage.getItem('fr_ap')||'fahrready2025' }; }
@@ -540,7 +540,7 @@ async function api(path, method='GET', body=null){
     const prefer = method==='POST' ? 'return=representation' : method==='PATCH'||method==='DELETE' ? 'return=minimal' : 'return=representation';
     const r = await fetch(SB+'/rest/v1/'+path, {
       method,
-      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':prefer},
+      headers:{'apikey':KEY,...(KEY.startsWith('eyJ')?{'Authorization':'Bearer '+KEY}:{}),'Content-Type':'application/json','Prefer':prefer},
       body: body ? JSON.stringify(body) : undefined
     });
     if(r.status===204) return {ok:true,data:[]};
@@ -554,7 +554,7 @@ async function uploadFile(file){
   try {
     const r = await fetch(SB+'/storage/v1/object/question-images/'+name, {
       method:'POST',
-      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type,'x-upsert':'true'},
+      headers:{'apikey':KEY,...(KEY.startsWith('eyJ')?{'Authorization':'Bearer '+KEY}:{}),'Content-Type':file.type,'x-upsert':'true'},
       body: file
     });
     if(!r.ok){
@@ -1310,11 +1310,20 @@ function toast(msg,type=''){
 // ── OTOMATİK ÇEVİRİ (MyMemory) ────────────────────────
 async function translateText(text, targetLang){
   if(!text) return '';
+  // Try Google Translate (unofficial, CORS-friendly)
+  try{
+    const r = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=de&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`);
+    const d = await r.json();
+    if(d && d[0]){
+      return d[0].map(x=>x[0]).join('');
+    }
+  }catch(e){console.log('google translate error',e);}
+  // Fallback: MyMemory
   try{
     const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=de|${targetLang}`);
     const d = await r.json();
     if(d.responseStatus===200) return d.responseData.translatedText;
-  }catch(e){}
+  }catch(e){console.log('mymemory error',e);}
   return '';
 }
 
