@@ -239,7 +239,6 @@ tr:hover td{background:#FAFBFF;}
     <input class="linp" type="email" id="lem" placeholder="Admin E-Mail">
     <input class="linp" type="password" id="lps" placeholder="Şifre">
     <button class="lbtn" onclick="doLogin()">Giriş Yap →</button>
-    <div style="margin-top:12px;font-size:10px;color:#9CA3AF;">Varsayılan: admin@fahrready.ch / fahrready2025</div>
   </div>
 </div>
 
@@ -471,8 +470,6 @@ tr:hover td{background:#FAFBFF;}
           <div class="sg"><label>Wise / Alternatif</label><input id="s-wise" placeholder="wise@fahrready.ch"></div>
           <div class="sg"><label>Aylık Fiyat (CHF)</label><input type="number" id="s-monthly" value="9"></div>
           <div class="sg"><label>Yıllık Fiyat (CHF)</label><input type="number" id="s-yearly" value="29"></div>
-          <div class="sg"><label>Admin E-Mail</label><input type="email" id="s-email"></div>
-          <div class="sg"><label>Admin Şifre (boş = değişmez)</label><input type="password" id="s-pass" placeholder="Yeni şifre..."></div>
         </div>
         <div style="padding:0 20px 20px;">
           <button class="btn success" onclick="saveSettings()">💾 Kaydet</button>
@@ -530,7 +527,9 @@ const SB = 'https://gmiklywexcgvofyejyah.supabase.co';
 const KEY = 'sb_publishable_buc1peVZnUceUpNn8z3eSw_C356Gf12';
 const STORE = SB + '/storage/v1/object/public/question-images/';
 
-function adm(){ return { e: localStorage.getItem('fr_ae')||'admin@fahrready.ch', p: localStorage.getItem('fr_ap')||'fahrready2025' }; }
+let TOKEN='', ADMIN_EMAIL='';
+function authH(){ return TOKEN?{'Authorization':'Bearer '+TOKEN}:{}; }
+function sessionExpired(){ TOKEN=''; alert('Oturum süresi doldu. Lütfen tekrar giriş yapın.'); location.reload(); }
 
 // ═══════════════════════════════════
 // SUPABASE
@@ -540,9 +539,10 @@ async function api(path, method='GET', body=null){
     const prefer = method==='POST' ? 'return=representation' : method==='PATCH'||method==='DELETE' ? 'return=minimal' : 'return=representation';
     const r = await fetch(SB+'/rest/v1/'+path, {
       method,
-      headers:{'apikey':KEY,...(KEY.startsWith('eyJ')?{'Authorization':'Bearer '+KEY}:{}),'Content-Type':'application/json','Prefer':prefer},
+      headers:{'apikey':KEY,...authH(),'Content-Type':'application/json','Prefer':prefer},
       body: body ? JSON.stringify(body) : undefined
     });
+    if(r.status===401 && TOKEN){ sessionExpired(); return {ok:false,status:401,data:[]}; }
     if(r.status===204) return {ok:true,data:[]};
     const data = await r.json().catch(()=>[]);
     return {ok:r.ok, status:r.status, data};
@@ -554,7 +554,7 @@ async function uploadFile(file){
   try {
     const r = await fetch(SB+'/storage/v1/object/question-images/'+name, {
       method:'POST',
-      headers:{'apikey':KEY,...(KEY.startsWith('eyJ')?{'Authorization':'Bearer '+KEY}:{}),'Content-Type':file.type,'x-upsert':'true'},
+      headers:{'apikey':KEY,...authH(),'Content-Type':file.type,'x-upsert':'true'},
       body: file
     });
     if(!r.ok){
@@ -576,26 +576,29 @@ let mAction=null, mData=null;
 // LOGIN
 // ═══════════════════════════════════
 window.onload = ()=>{
-  document.getElementById('lem').value = adm().e;
   document.getElementById('lem').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('lps').focus(); });
   document.getElementById('lps').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
 };
 
-function doLogin(){
+async function doLogin(){
   const e=document.getElementById('lem').value.trim(), p=document.getElementById('lps').value;
-  const a=adm();
-  if(e===a.e && p===a.p){
+  const err=document.getElementById('lerr'); err.style.display='none';
+  try{
+    const r=await fetch(SB+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':KEY,'Content-Type':'application/json'},body:JSON.stringify({email:e,password:p})});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok||!d.access_token){ err.style.display='block'; return; }
+    TOKEN=d.access_token; ADMIN_EMAIL=e;
+    document.getElementById('lps').value='';
     document.getElementById('loginWrap').style.display='none';
     document.getElementById('app').style.display='block';
     document.getElementById('pdate').textContent = new Date().toLocaleString('tr-TR');
     loadSettings(); loadDashboard(); loadQ(); loadNews(); loadUsers(); loadPayments(); loadAds();
-  } else { document.getElementById('lerr').style.display='block'; }
+  }catch(x){ err.style.display='block'; }
 }
 function doLogout(){
   if(!confirm('Çıkış yapmak istediğinizden emin misiniz?')) return;
   if(!confirm('Emin misiniz? Tüm oturumunuz kapanacak.')) return;
-  document.getElementById('loginWrap').style.display='flex';
-  document.getElementById('app').style.display='none';
+  TOKEN=''; location.reload();
 }
 
 // ═══════════════════════════════════
@@ -1214,7 +1217,6 @@ async function loadSettings(){
     const m={iban:'s-iban',wise:'s-wise',price_monthly:'s-monthly',price_yearly:'s-yearly'};
     r.data.forEach(s=>{ const el=document.getElementById(m[s.key]); if(el) el.value=s.value||''; });
   }
-  document.getElementById('s-email').value=localStorage.getItem('fr_ae')||'admin@fahrready.ch';
   loadAppLinks();
 }
 async function saveSettings(){
@@ -1225,10 +1227,7 @@ async function saveSettings(){
     {key:'price_yearly',val:document.getElementById('s-yearly').value},
   ];
   for(const p of pairs) await api('settings?key=eq.'+p.key,'PATCH',{value:p.val});
-  const em=document.getElementById('s-email').value.trim();
-  const ps=document.getElementById('s-pass').value;
-  if(em) localStorage.setItem('fr_ae',em);
-  if(ps) localStorage.setItem('fr_ap',ps);
+  // Admin e-posta/şifre artık Supabase Authentication panelinden yönetilir.
   toast('✓ Ayarlar kaydedildi!','ok');
 }
 

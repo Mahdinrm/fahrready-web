@@ -959,9 +959,10 @@ const SBKEY='sb_publishable_buc1peVZnUceUpNn8z3eSw_C356Gf12';
 const IBAN_DISPLAY = 'Wird nach Ihrer Bestätigung bekannt gegeben / پس از تأیید اعلام می‌شود';
 
 // ── SUPABASE ─────────────────────────────────────────────
-async function sbReq(path,method,body){
-  const r=await fetch(SBURL+'/rest/v1/'+path,{method:method||'GET',headers:{'apikey':SBKEY,...(SBKEY.startsWith('eyJ')?{'Authorization':'Bearer '+SBKEY}:{}),'Content-Type':'application/json','Prefer':'return=representation'},body:body?JSON.stringify(body):undefined});
-  return{ok:r.ok,status:r.status,data:await r.json()};
+async function sbReq(path,method,body,tok){
+  const prefer=(path==='payments'||path==='exam_results')?'return=minimal':'return=representation';
+  const r=await fetch(SBURL+'/rest/v1/'+path,{method:method||'GET',headers:{'apikey':SBKEY,...(SBKEY.startsWith('eyJ')?{'Authorization':'Bearer '+SBKEY}:{}),...(tok?{'Authorization':'Bearer '+tok}:{}),'Content-Type':'application/json','Prefer':prefer},body:body?JSON.stringify(body):undefined});
+  return{ok:r.ok,status:r.status,data:await r.json().catch(()=>[])};
 }
 async function hashPwd(p){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p+'fahrready2025'));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
 
@@ -1181,7 +1182,7 @@ async function doRegister(){
   if(pass.length<6){showErr('regErr',t.passShort);return;}
   showSpin('regSpin',true);hideEl('regErr');hideEl('regOk');
   const ph=await hashPwd(pass);
-  const res=await sbReq('users','POST',{email,full_name:name,language:lang,kanton,password_hash:ph,is_premium:false,created_at:new Date().toISOString()});
+  const res=await sbReq('rpc/app_signup','POST',{p_email:email,p_name:name,p_lang:lang,p_kanton:kanton||'',p_hash:ph});
   showSpin('regSpin',false);
   if(res.ok&&res.data&&res.data[0]){showSucc('regOk',t.welcome+' '+name+'! ✓');saveUser(res.data[0]);setL(lang);setTimeout(()=>goto('exam'),1500);}
   else if(res.data?.code==='23505'){showErr('regErr',t.emailExists);}
@@ -1521,12 +1522,8 @@ async function verifyOtpWeb(){
     });
     const data = await r.json();
     if(r.ok && data.user){
-      const ur = await sbReq('users?email=eq.'+encodeURIComponent(phone));
+      const ur = await sbReq('rpc/app_phone_login','POST',{p_lang:LANG,p_name:T.user+' '+phone.slice(-4)},data.access_token);
       let user = (ur.ok && Array.isArray(ur.data) && ur.data[0]) || null;
-      if(!user){
-        const cr = await sbReq('users','POST',{email:phone,password_hash:'phone_'+Date.now(),full_name:T.user+' '+phone.slice(-4),language:LANG,is_premium:false,created_at:new Date().toISOString()});
-        user = (cr.ok && Array.isArray(cr.data) && cr.data[0]) || null;
-      }
       if(user){saveUser(user);closeModal(true);toast(T.welcome+' '+user.full_name+'!','ok');setL(user.language||'de');}
     } else {
       toast(data.msg||T.wrongCode,'err');
@@ -1539,11 +1536,10 @@ async function doLogin(){
   if(!email||!pass){showErr('loginErr',TX[LANG].fillAll);return;}
   showSpin('loginSpin',true);
   const ph=await hashPwd(pass);
-  const res=await sbReq(`users?email=eq.${encodeURIComponent(email)}&password_hash=eq.${ph}&select=*`);
+  const res=await sbReq('rpc/app_login','POST',{p_email:email,p_hash:ph});
   showSpin('loginSpin',false);
   if(res.ok&&res.data&&res.data.length>0){
     saveUser(res.data[0]);
-    await sbReq(`users?id=eq.${res.data[0].id}`,'PATCH',{last_login:new Date().toISOString()});
     closeModal(true);toast(`🎉 ${TX[LANG].welcome} ${res.data[0].full_name.split(' ')[0]}!`,'ok');setL(res.data[0].language||'de');
   }else{showErr('loginErr',TX[LANG].loginFail);}
 }
@@ -1554,7 +1550,7 @@ async function doModalRegister(){
   if(pass.length<6){showErr('mregErr',t.passShort);return;}
   showSpin('mregSpin',true);hideEl('mregErr');
   const ph=await hashPwd(pass);
-  const res=await sbReq('users','POST',{email,full_name:name,language:lang,password_hash:ph,is_premium:false,created_at:new Date().toISOString()});
+  const res=await sbReq('rpc/app_signup','POST',{p_email:email,p_name:name,p_lang:lang,p_kanton:'',p_hash:ph});
   showSpin('mregSpin',false);
   if(res.ok&&res.data&&res.data[0]){showSucc('mregOk',t.welcome+' '+name+'!');saveUser(res.data[0]);closeModal(true);setL(lang);}
   else if(res.data?.code==='23505'){showErr('mregErr',t.emailExists);}
@@ -1584,8 +1580,8 @@ function saveProfileName(){
     saved: {de:'Gespeichert!',fa:'ذخیره شد!',az:'Yadda saxlanıldı!',en:'Saved!'}[LANG],
   };
   if(!name){toast(T.enterName,'err');return;}
-  sbReq('users?id=eq.'+USER.id,'PATCH',{full_name:name}).then(r=>{
-    if(r){USER.full_name=name;localStorage.setItem('fr_user',JSON.stringify(USER));updateNavUser();toast(T.saved,'ok');}
+  sbReq('rpc/app_update_name','POST',{p_id:USER.id,p_token:USER.token,p_name:name}).then(r=>{
+    if(r.ok&&r.data===true){USER.full_name=name;localStorage.setItem('fr_user',JSON.stringify(USER));updateNavUser();toast(T.saved,'ok');}
   });
 }
 
@@ -1603,7 +1599,7 @@ function confirmDeleteAccount(){
   const msgOk={de:'Konto gelöscht',fa:'حساب حذف شد',az:'Hesab silindi',en:'Account deleted'}[LANG]||'Konto gelöscht';
   if(confirm(msg1)){
     if(confirm(msg2)){
-      sbReq('users?id=eq.'+USER.id,'DELETE').then(()=>{
+      sbReq('rpc/app_delete_account','POST',{p_id:USER.id,p_token:USER.token}).then(()=>{
         doLogout();
         toast(msgOk,'ok');
       });
